@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMap", "CodeMap\CodeMap.csproj", "{C118E875-802E-499E-B82E-381AF4420AFF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMap", "CodeMap\CodeMap.csproj", "{B9DEEC34-ADEF-4418-BD86-44D4C578A940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C118E875-802E-499E-B82E-381AF4420AFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C118E875-802E-499E-B82E-381AF4420AFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C118E875-802E-499E-B82E-381AF4420AFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C118E875-802E-499E-B82E-381AF4420AFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9DEEC34-ADEF-4418-BD86-44D4C578A940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9DEEC34-ADEF-4418-BD86-44D4C578A940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9DEEC34-ADEF-4418-BD86-44D4C578A940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9DEEC34-ADEF-4418-BD86-44D4C578A940}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

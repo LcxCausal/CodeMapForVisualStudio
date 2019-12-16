@@ -1,20 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-    <Metadata>
-        <Identity Id="CodeMap.1b592310-4e8f-4977-8f29-c8456d0ed6c8" Version="1.0" Language="zh-CN" Publisher="Chengxian Liu" />
-        <DisplayName>CodeMap</DisplayName>
-        <Description xml:space="preserve">This is a code map for visual studio extension.</Description>
-    </Metadata>
-    <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />
-    </Installation>
-    <Dependencies>
-        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-    </Dependencies>
-    <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
-    </Prerequisites>
-    <Assets>
-        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-    </Assets>
+  <Metadata>
+    <Identity Id="CodeMap.b74588ba-1d8d-4d12-a924-c3d555217c9b" Version="1.0" Language="en-US" Publisher="Chengxian Liu" />
+    <DisplayName>CodeMap</DisplayName>
+    <Description>Empty VSIX Project.</Description>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+    <Dependency Id="Microsoft.VisualStudio.MPF.16.0" DisplayName="Visual Studio MPF 16.0" d:Source="Installed" Version="[16.0,17.0)" />
+  </Dependencies>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
 </PackageManifest>
