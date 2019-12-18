@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
 using Task = System.Threading.Tasks.Task;
 
-namespace CodeMap
+namespace CodeMapForVisualStudio
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -33,21 +33,22 @@ namespace CodeMap
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideToolWindow(typeof(CodeMapTW))]
-    [Guid(CodeMapTWPackage.PackageGuidString)]
+    [ProvideToolWindow(typeof(CodeMap))]
+    [Guid(CodeMapPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class CodeMapTWPackage : AsyncPackage
+    public sealed class CodeMapPackage : AsyncPackage
     {
         /// <summary>
-        /// CodeMapTWPackage GUID string.
+        /// CodeMapPackage GUID string.
         /// </summary>
-        public const string PackageGuidString = "666918c1-63f0-4464-88cc-7ea0c58d9356";
+        public const string PackageGuidString = "e6f57669-333d-491e-a5a3-df705490de60";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CodeMapTWPackage"/> class.
+        /// Initializes a new instance of the <see cref="CodeMapPackage"/> class.
         /// </summary>
-        public CodeMapTWPackage()
+        public CodeMapPackage()
         {
             // Inside this method you can place any initialization code that does not require
             // any Visual Studio service because at this point the package object is created but
@@ -69,7 +70,28 @@ namespace CodeMap
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await CodeMapTWCommand.InitializeAsync(this);
+            await CodeMapCommand.InitializeAsync(this);
+        }
+
+        public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (toolWindowType == typeof(CodeMap).GUID)
+            {
+                return this;
+            }
+
+            return base.GetAsyncToolWindowFactory(toolWindowType);
+        }
+
+        protected override string GetToolWindowTitle(Type toolWindowType, int id)
+        {
+            if (toolWindowType == typeof(CodeMap))
+            {
+                return "CodeMap loading";
+            }
+
+            return base.GetToolWindowTitle(toolWindowType, id);
         }
 
         #endregion

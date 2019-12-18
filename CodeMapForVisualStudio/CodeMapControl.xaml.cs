@@ -1,18 +1,18 @@
-﻿namespace CodeMap
+﻿namespace CodeMapForVisualStudio
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Controls;
 
     /// <summary>
-    /// Interaction logic for CodeMapTWControl.
+    /// Interaction logic for CodeMapControl.
     /// </summary>
-    public partial class CodeMapTWControl : UserControl
+    public partial class CodeMapControl : UserControl
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CodeMapTWControl"/> class.
+        /// Initializes a new instance of the <see cref="CodeMapControl"/> class.
         /// </summary>
-        public CodeMapTWControl()
+        public CodeMapControl()
         {
             this.InitializeComponent();
         }
@@ -28,7 +28,7 @@
         {
             MessageBox.Show(
                 string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-                "CodeMapTW");
+                "CodeMap");
         }
     }
 }
