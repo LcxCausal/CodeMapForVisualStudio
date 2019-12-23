@@ -12,6 +12,8 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
 using Task = System.Threading.Tasks.Task;
+using EnvDTE;
+using Microsoft.VisualStudio.ComponentModelHost;
 
 namespace CodeMapForVisualStudio
 {
@@ -45,6 +47,10 @@ namespace CodeMapForVisualStudio
         /// </summary>
         public const string PackageGuidString = "e6f57669-333d-491e-a5a3-df705490de60";
 
+        public DTE DTE { get; set; }
+
+        public IComponentModel ComponentModel { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeMapPackage"/> class.
         /// </summary>
@@ -69,29 +75,23 @@ namespace CodeMapForVisualStudio
         {
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
-            await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+            DTE = await GetServiceAsync(typeof(DTE)) as DTE;
+            ComponentModel = await GetServiceAsync(typeof(SComponentModel)) as IComponentModel;
+
             await CodeMapCommand.InitializeAsync(this);
         }
 
         public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (toolWindowType == typeof(CodeMap).GUID)
-            {
-                return this;
-            }
-
-            return base.GetAsyncToolWindowFactory(toolWindowType);
+            return toolWindowType == typeof(CodeMap).GUID ? (this) : base.GetAsyncToolWindowFactory(toolWindowType);
         }
 
         protected override string GetToolWindowTitle(Type toolWindowType, int id)
         {
-            if (toolWindowType == typeof(CodeMap))
-            {
-                return "CodeMap loading";
-            }
-
-            return base.GetToolWindowTitle(toolWindowType, id);
+            return toolWindowType == typeof(CodeMap) ? "CodeMap loading" : base.GetToolWindowTitle(toolWindowType, id);
         }
 
         #endregion

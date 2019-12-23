@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
+using EnvDTE;
 
 namespace CodeMapForVisualStudio
 {
@@ -19,17 +20,49 @@ namespace CodeMapForVisualStudio
     [ProvideToolWindow(typeof(CodeMap), Style = VsDockStyle.Float)]
     public class CodeMap : ToolWindowPane
     {
+        private WindowEvents windowEvents;
+        private DocumentEvents documentEvents;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeMap"/> class.
         /// </summary>
         public CodeMap() : base(null)
         {
-            this.Caption = "CodeMap";
+            Caption = "CodeMap";
 
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
             // the object returned by the Content property.
-            this.Content = new CodeMapControl();
+            Content = new CodeMapControl();
+        }
+
+        public override void OnToolWindowCreated()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            base.OnToolWindowCreated();
+
+            var codeMapPackage = Package as CodeMapPackage;
+
+            // Bind window actived event.
+            windowEvents = codeMapPackage.DTE.Events.WindowEvents;
+            windowEvents.WindowActivated += WindowEvents_WindowActivated;
+
+            // Bind document saved and opened events.
+            documentEvents = codeMapPackage.DTE.Events.DocumentEvents;
+            documentEvents.DocumentSaved += DocumentEvents_DocumentSaved;
+            documentEvents.DocumentOpened += DocumentEvents_DocumentOpened;
+        }
+
+        private void DocumentEvents_DocumentOpened(Document Document)
+        {
+        }
+
+        private void DocumentEvents_DocumentSaved(Document Document)
+        {
+        }
+
+        private void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)
+        {
         }
     }
 }

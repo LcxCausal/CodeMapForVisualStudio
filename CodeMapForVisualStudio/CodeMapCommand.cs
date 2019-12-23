@@ -41,7 +41,7 @@ namespace CodeMapForVisualStudio
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new MenuCommand(this.Execute, menuCommandID);
+            var menuItem = new MenuCommand(Execute, menuCommandID);
             commandService.AddCommand(menuItem);
         }
 
@@ -61,7 +61,7 @@ namespace CodeMapForVisualStudio
         {
             get
             {
-                return this.package;
+                return package;
             }
         }
 
@@ -75,7 +75,7 @@ namespace CodeMapForVisualStudio
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
-            OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+            var commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
             Instance = new CodeMapCommand(package, commandService);
         }
 
@@ -86,9 +86,9 @@ namespace CodeMapForVisualStudio
         /// <param name="e">The event args.</param>
         private void Execute(object sender, EventArgs e)
         {
-            this.package.JoinableTaskFactory.RunAsync(async delegate
+            package.JoinableTaskFactory.RunAsync(async delegate
             {
-                ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(CodeMap), 0, true, this.package.DisposalToken);
+                var window = await package.ShowToolWindowAsync(typeof(CodeMap), 0, true, package.DisposalToken);
                 if ((null == window) || (null == window.Frame))
                 {
                     throw new NotSupportedException("Cannot create tool window");

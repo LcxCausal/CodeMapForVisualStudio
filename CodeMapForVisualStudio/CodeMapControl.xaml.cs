@@ -14,7 +14,7 @@
         /// </summary>
         public CodeMapControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }
