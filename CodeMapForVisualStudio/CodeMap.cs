@@ -2,6 +2,8 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using EnvDTE;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CodeMapForVisualStudio
 {
@@ -53,16 +55,68 @@ namespace CodeMapForVisualStudio
             documentEvents.DocumentOpened += DocumentEvents_DocumentOpened;
         }
 
-        private void DocumentEvents_DocumentOpened(Document Document)
+        private async void DocumentEvents_DocumentOpened(Document document)
+        {
+            var codeItems = await MapDocumentAsync(document);
+        }
+
+        private async void DocumentEvents_DocumentSaved(Document document)
+        {
+            var codeItems = await MapDocumentAsync(document);
+        }
+
+        private void WindowEvents_WindowActivated(Window gotFocus, Window lostFocus)
         {
         }
 
-        private void DocumentEvents_DocumentSaved(Document Document)
+        private static async Task<List<CodeItem>> MapDocumentAsync(Document activeDocument)
         {
+            try
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                var filePath = GetFullName(activeDocument);
+
+                // temp code.
+                return null;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
-        private void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)
+        /// <summary>
+        /// Get the FullName/FilePath for the given document
+        /// </summary>
+        /// <param name="document">the document</param>
+        /// <returns></returns>
+        private static string GetFullName(Document document)
         {
+            var name = string.Empty;
+
+            if (document == null) return name;
+
+            try
+            {
+                System.Windows.Threading.Dispatcher.CurrentDispatcher.VerifyAccess();
+                name = document.FullName;
+            }
+            catch (COMException)
+            {
+                // Catastrophic failure (Exception from HRESULT: 0x8000FFFF (E_UNEXPECTED))
+                // We have other ways to try and map this document
+            }
+            catch (ArgumentException)
+            {
+                // The parameter is incorrect. (Exception from HRESULT: 0x80070057 (E_INVALIDARG))
+                // We have other ways to try and map this document
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error getting FullName for document.", e);
+            }
+            return name;
         }
     }
 }
