@@ -51,13 +51,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CodeItem.cs" />
+    <Compile Include="CodeItems\ClassCodeItem.cs" />
+    <Compile Include="CodeItems\CodeItem.cs" />
+    <Compile Include="CodeItems\FieldCodeItem.cs" />
+    <Compile Include="CodeItems\MethodCodeItem.cs" />
+    <Compile Include="CodeItems\PropertyCodeItem.cs" />
     <Compile Include="CodeMap.cs" />
     <Compile Include="CodeMapCommand.cs" />
     <Compile Include="CodeMapControl.xaml.cs">
       <DependentUpon>CodeMapControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="CodeMapPackage.cs" />
+    <Compile Include="InternalHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

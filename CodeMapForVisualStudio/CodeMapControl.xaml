@@ -10,7 +10,7 @@
              d:DesignHeight="300" d:DesignWidth="300"
              Name="MyToolWindow">
     <Grid>
-        <StackPanel Name="codeMapPannel" Orientation="Vertical">
-        </StackPanel>
+        <ScrollViewer Name="codeMap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        </ScrollViewer>
     </Grid>
 </UserControl>

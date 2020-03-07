@@ -4,6 +4,14 @@ using Microsoft.VisualStudio.Shell;
 using EnvDTE;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.IO;
+using System.Text;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace CodeMapForVisualStudio
 {
@@ -22,6 +30,7 @@ namespace CodeMapForVisualStudio
     [ProvideToolWindow(typeof(CodeMap), Style = VsDockStyle.Float)]
     public class CodeMap : ToolWindowPane
     {
+        private readonly ScrollViewer codeMap;
         private WindowEvents windowEvents;
         private DocumentEvents documentEvents;
 
@@ -36,6 +45,7 @@ namespace CodeMapForVisualStudio
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
             // the object returned by the Content property.
             Content = new CodeMapControl();
+            codeMap = ((CodeMapControl)Content).codeMap;
         }
 
         public override void OnToolWindowCreated()
@@ -57,16 +67,31 @@ namespace CodeMapForVisualStudio
 
         private async void DocumentEvents_DocumentOpened(Document document)
         {
-            var codeItems = await MapDocumentAsync(document);
+            UpdateCodeMap(document);
         }
 
         private async void DocumentEvents_DocumentSaved(Document document)
         {
-            var codeItems = await MapDocumentAsync(document);
+            UpdateCodeMap(document);
         }
 
-        private void WindowEvents_WindowActivated(Window gotFocus, Window lostFocus)
+        private async void WindowEvents_WindowActivated(Window gotFocus, Window lostFocus)
         {
+            // TODO
+        }
+
+        private async void UpdateCodeMap(Document document)
+        {
+            var codeItems = await MapDocumentAsync(document);
+
+            if (codeItems == null)
+                return;
+
+            var codeTree = new TreeView() { Background = Brushes.Transparent };
+            codeMap.Content = codeTree;
+
+            foreach (var codeItem in codeItems)
+                codeTree.Items.Add(codeItem.ToUIControl());
         }
 
         private static async Task<List<CodeItem>> MapDocumentAsync(Document activeDocument)
@@ -76,11 +101,22 @@ namespace CodeMapForVisualStudio
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
                 var filePath = GetFullName(activeDocument);
+                var currentText = File.ReadAllText(filePath, Encoding.UTF8);
+                var csTree = CSharpSyntaxTree.ParseText(currentText);
+                var syntaxRoot = await csTree.GetRootAsync();
 
-                // temp code.
-                return null;
+                if (!InternalHelper.SupportedLanguages.Contains(syntaxRoot.Language))
+                    return null;
+
+                var codeItems = new List<CodeItem>();
+                var classNodes = syntaxRoot.DescendantNodes().OfType<ClassDeclarationSyntax>();
+
+                foreach (var classNode in classNodes)
+                    codeItems.Add(new ClassCodeItem(classNode));
+
+                return codeItems;
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }
