@@ -9,7 +9,6 @@ using System.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -31,7 +30,6 @@ namespace CodeMapForVisualStudio
     public class CodeMap : ToolWindowPane
     {
         private readonly ScrollViewer codeMap;
-        private WindowEvents windowEvents;
         private DocumentEvents documentEvents;
 
         /// <summary>
@@ -55,10 +53,6 @@ namespace CodeMapForVisualStudio
 
             var codeMapPackage = Package as CodeMapPackage;
 
-            // Bind window actived event.
-            windowEvents = codeMapPackage.DTE.Events.WindowEvents;
-            windowEvents.WindowActivated += WindowEvents_WindowActivated;
-
             // Bind document saved and opened events.
             documentEvents = codeMapPackage.DTE.Events.DocumentEvents;
             documentEvents.DocumentSaved += DocumentEvents_DocumentSaved;
@@ -75,11 +69,6 @@ namespace CodeMapForVisualStudio
             UpdateCodeMap(document);
         }
 
-        private async void WindowEvents_WindowActivated(Window gotFocus, Window lostFocus)
-        {
-            // TODO
-        }
-
         private async void UpdateCodeMap(Document document)
         {
             var codeItems = await MapDocumentAsync(document);
@@ -94,13 +83,13 @@ namespace CodeMapForVisualStudio
                 codeTree.Items.Add(codeItem.ToUIControl());
         }
 
-        private static async Task<List<CodeItem>> MapDocumentAsync(Document activeDocument)
+        private static async Task<List<CodeItem>> MapDocumentAsync(Document document)
         {
             try
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                var filePath = GetFullName(activeDocument);
+                var filePath = GetFullName(document);
                 var currentText = File.ReadAllText(filePath, Encoding.UTF8);
                 var csTree = CSharpSyntaxTree.ParseText(currentText);
                 var syntaxRoot = await csTree.GetRootAsync();
@@ -112,7 +101,7 @@ namespace CodeMapForVisualStudio
                 var classNodes = syntaxRoot.DescendantNodes().OfType<ClassDeclarationSyntax>();
 
                 foreach (var classNode in classNodes)
-                    codeItems.Add(new ClassCodeItem(classNode));
+                    codeItems.Add(new ClassCodeItem(classNode, document.Selection as TextSelection));
 
                 return codeItems;
             }

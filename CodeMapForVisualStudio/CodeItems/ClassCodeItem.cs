@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using EnvDTE;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 
@@ -8,8 +9,8 @@ namespace CodeMapForVisualStudio
     {
         private readonly Collection<CodeItem> memberCodeItems;
 
-        public ClassCodeItem(ClassDeclarationSyntax classDeclarationSyntax)
-            : base(classDeclarationSyntax)
+        public ClassCodeItem(ClassDeclarationSyntax classDeclarationSyntax, TextSelection selection)
+            : base(classDeclarationSyntax, selection)
         {
             var fields = new Collection<CodeItem>();
             var properties = new Collection<CodeItem>();
@@ -19,13 +20,13 @@ namespace CodeMapForVisualStudio
             foreach (var memberDeclarationSyntax in classDeclarationSyntax.Members)
             {
                 if (memberDeclarationSyntax is FieldDeclarationSyntax fieldDeclarationSyntax)
-                    fields.Add(new FieldCodeItem(fieldDeclarationSyntax));
+                    fields.Add(new FieldCodeItem(fieldDeclarationSyntax, selection));
                 else if (memberDeclarationSyntax is PropertyDeclarationSyntax propertyDeclarationSyntax)
-                    properties.Add(new PropertyCodeItem(propertyDeclarationSyntax));
+                    properties.Add(new PropertyCodeItem(propertyDeclarationSyntax, selection));
                 else if (memberDeclarationSyntax is MethodDeclarationSyntax methodDeclarationSyntax)
-                    methods.Add(new MethodCodeItem(methodDeclarationSyntax));
+                    methods.Add(new MethodCodeItem(methodDeclarationSyntax, selection));
                 else if (memberDeclarationSyntax is ClassDeclarationSyntax subClassDeclarationSyntax)
-                    classes.Add(new ClassCodeItem(subClassDeclarationSyntax));
+                    classes.Add(new ClassCodeItem(subClassDeclarationSyntax, selection));
             }
 
             memberCodeItems = new Collection<CodeItem>();

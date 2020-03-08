@@ -1,5 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Windows.Controls;
+﻿using EnvDTE;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeMapForVisualStudio
 {
@@ -8,11 +8,11 @@ namespace CodeMapForVisualStudio
         private string fieldType;
 
         private FieldCodeItem()
-            : this(null)
+            : this(null, null)
         { }
 
-        public FieldCodeItem(FieldDeclarationSyntax fieldDeclarationSyntax)
-            : base(fieldDeclarationSyntax)
+        public FieldCodeItem(FieldDeclarationSyntax fieldDeclarationSyntax, TextSelection selection)
+            : base(fieldDeclarationSyntax, selection)
         {
             if (fieldDeclarationSyntax == null)
                 return;

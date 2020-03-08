@@ -1,6 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using EnvDTE;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
-using System.Windows.Controls;
 
 namespace CodeMapForVisualStudio
 {
@@ -9,8 +9,12 @@ namespace CodeMapForVisualStudio
         private readonly string accessors;
         private readonly string propertyType;
 
-        public PropertyCodeItem(PropertyDeclarationSyntax propertyDeclarationSyntax)
-            : base(propertyDeclarationSyntax)
+        private PropertyCodeItem()
+            : this(null, null)
+        { }
+
+        public PropertyCodeItem(PropertyDeclarationSyntax propertyDeclarationSyntax, TextSelection selection)
+            : base(propertyDeclarationSyntax, selection)
         {
             if (propertyDeclarationSyntax == null)
                 return;

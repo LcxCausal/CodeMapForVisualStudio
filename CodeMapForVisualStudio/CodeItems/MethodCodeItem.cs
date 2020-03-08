@@ -1,5 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Windows.Controls;
+﻿using EnvDTE;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeMapForVisualStudio
 {
@@ -7,8 +7,12 @@ namespace CodeMapForVisualStudio
     {
         private readonly string returnType;
 
-        public MethodCodeItem(MethodDeclarationSyntax methodDeclarationSyntax)
-            : base(methodDeclarationSyntax)
+        private MethodCodeItem()
+            : this(null, null)
+        { }
+
+        public MethodCodeItem(MethodDeclarationSyntax methodDeclarationSyntax, TextSelection selection)
+            : base(methodDeclarationSyntax, selection)
         {
             if (methodDeclarationSyntax == null)
                 return;
