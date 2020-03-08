@@ -30,6 +30,7 @@ namespace CodeMapForVisualStudio
     public class CodeMap : ToolWindowPane
     {
         private readonly ScrollViewer codeMap;
+        private WindowEvents windowEvents;
         private DocumentEvents documentEvents;
 
         /// <summary>
@@ -53,10 +54,20 @@ namespace CodeMapForVisualStudio
 
             var codeMapPackage = Package as CodeMapPackage;
 
+            // Bind window activeted events.
+            windowEvents = codeMapPackage.DTE.Events.WindowEvents;
+            windowEvents.WindowActivated += WindowEvents_WindowActivated;
+
             // Bind document saved and opened events.
             documentEvents = codeMapPackage.DTE.Events.DocumentEvents;
             documentEvents.DocumentSaved += DocumentEvents_DocumentSaved;
             documentEvents.DocumentOpened += DocumentEvents_DocumentOpened;
+        }
+
+        private void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            UpdateCodeMap(GotFocus.Document);
         }
 
         private async void DocumentEvents_DocumentOpened(Document document)

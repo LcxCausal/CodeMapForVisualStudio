@@ -45,9 +45,11 @@ namespace CodeMapForVisualStudio
         public virtual TreeViewItem ToUIControl()
         {
             var treeViewItem = new TreeViewItem();
+            treeViewItem.IsExpanded = true;
             treeViewItem.Header = ToString();
+            treeViewItem.FontFamily = new FontFamily("Times New Roman");
             treeViewItem.FontSize = 10 * scaleFactor;
-            treeViewItem.Foreground = Brushes.WhiteSmoke;
+            treeViewItem.Foreground = new SolidColorBrush(Color.FromArgb(255, 196, 196, 196));
 
             treeViewItem.MouseEnter += TreeViewItem_MouseEnter;
             treeViewItem.MouseLeave += TreeViewItem_MouseLeave;
@@ -76,7 +78,7 @@ namespace CodeMapForVisualStudio
         private void TreeViewItem_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             var treeViewItem = (TreeViewItem)sender;
-            treeViewItem.FontSize = 11 * scaleFactor;
+            treeViewItem.FontSize = 10.5 * scaleFactor;
         }
 
         public override string ToString()
