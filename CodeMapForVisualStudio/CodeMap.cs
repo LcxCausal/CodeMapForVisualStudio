@@ -30,6 +30,7 @@ namespace CodeMapForVisualStudio
     public class CodeMap : ToolWindowPane
     {
         private readonly ScrollViewer codeMap;
+
         private WindowEvents windowEvents;
         private DocumentEvents documentEvents;
 
@@ -45,6 +46,30 @@ namespace CodeMapForVisualStudio
             // the object returned by the Content property.
             Content = new CodeMapControl();
             codeMap = ((CodeMapControl)Content).codeMap;
+            codeMap.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            codeMap.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            codeMap.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+            codeMap.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+            codeMap.PreviewMouseWheel += CodeMap_PreviewMouseWheel;
+        }
+
+        private void CodeMap_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            var viewer = codeMap;
+
+            if (viewer == null)
+                return;
+
+            double number = Math.Abs(e.Delta / 2);
+            var offset = e.Delta > 0
+                ? Math.Max(0.0, viewer.VerticalOffset - number)
+                : Math.Min(viewer.ScrollableHeight, viewer.VerticalOffset + number);
+
+            if (offset != viewer.VerticalOffset)
+            {
+                viewer.ScrollToVerticalOffset(offset);
+                e.Handled = true;
+            }
         }
 
         public override void OnToolWindowCreated()
@@ -56,12 +81,18 @@ namespace CodeMapForVisualStudio
 
             // Bind window activeted events.
             windowEvents = codeMapPackage.DTE.Events.WindowEvents;
+            windowEvents.WindowClosing += WindowEvents_WindowClosing;
             windowEvents.WindowActivated += WindowEvents_WindowActivated;
 
             // Bind document saved and opened events.
             documentEvents = codeMapPackage.DTE.Events.DocumentEvents;
             documentEvents.DocumentSaved += DocumentEvents_DocumentSaved;
             documentEvents.DocumentOpened += DocumentEvents_DocumentOpened;
+        }
+
+        private void WindowEvents_WindowClosing(Window Window)
+        {
+            codeMap.Content = null;
         }
 
         private void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)

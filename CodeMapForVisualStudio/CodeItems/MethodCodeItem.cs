@@ -1,11 +1,13 @@
 ﻿using EnvDTE;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.ObjectModel;
 
 namespace CodeMapForVisualStudio
 {
     public class MethodCodeItem : CodeItem
     {
         private readonly string returnType;
+        private readonly string parameters;
 
         private MethodCodeItem()
             : this(null, null)
@@ -18,11 +20,16 @@ namespace CodeMapForVisualStudio
                 return;
 
             returnType = methodDeclarationSyntax.ReturnType.ToString();
+
+            var parametersBuilder = new Collection<string>();
+            foreach (var parameter in methodDeclarationSyntax.ParameterList.Parameters)
+                parametersBuilder.Add($"{parameter.Type.ToString()} {parameter.Identifier.ValueText}");
+            parameters = string.Join(", ", parametersBuilder);
         }
 
         public string ReturnType { get => returnType; }
 
-        public override string GetNameFromDeclarationSyntax(MemberDeclarationSyntax memberDeclarationSyntax)
+        protected override string GetNameFromDeclarationSyntaxCore(MemberDeclarationSyntax memberDeclarationSyntax)
         {
             return memberDeclarationSyntax != null && memberDeclarationSyntax is MethodDeclarationSyntax methodDeclarationSyntax ?
                 methodDeclarationSyntax.Identifier.ValueText :
@@ -31,7 +38,7 @@ namespace CodeMapForVisualStudio
 
         public override string ToString()
         {
-            return $"{string.Join(" ", Modifiers)} {returnType} {Name}";
+            return $"{string.Join(" ", Modifiers)} {returnType} {Name}({parameters})";
         }
     }
 }

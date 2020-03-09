@@ -22,7 +22,7 @@ namespace CodeMapForVisualStudio
 
         public string FieldType { get => fieldType; set => fieldType = value; }
 
-        public override string GetNameFromDeclarationSyntax(MemberDeclarationSyntax memberDeclarationSyntax)
+        protected override string GetNameFromDeclarationSyntaxCore(MemberDeclarationSyntax memberDeclarationSyntax)
         {
             return memberDeclarationSyntax != null && memberDeclarationSyntax is FieldDeclarationSyntax fieldDeclarationSyntax ?
                 fieldDeclarationSyntax.Declaration.Variables.FirstOrDefault().Identifier.ValueText :

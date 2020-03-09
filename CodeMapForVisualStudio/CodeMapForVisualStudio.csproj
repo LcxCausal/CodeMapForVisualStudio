@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="CodeItems\ClassCodeItem.cs" />
     <Compile Include="CodeItems\CodeItem.cs" />
+    <Compile Include="CodeItems\ConstructorCodeItem.cs" />
     <Compile Include="CodeItems\FieldCodeItem.cs" />
     <Compile Include="CodeItems\MethodCodeItem.cs" />
     <Compile Include="CodeItems\PropertyCodeItem.cs" />

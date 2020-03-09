@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -31,7 +30,7 @@ namespace CodeMapForVisualStudio
             this.selection = selection;
             Location = memberDeclarationSyntax.GetLocation();
             Modifiers = memberDeclarationSyntax.Modifiers.Select(m => m.ValueText);
-            Name = GetNameFromDeclarationSyntax(memberDeclarationSyntax);
+            Name = GetNameFromDeclarationSyntaxCore(memberDeclarationSyntax);
         }
 
         public Location Location { get => locaion; protected set => locaion = value; }
@@ -40,9 +39,19 @@ namespace CodeMapForVisualStudio
 
         public string Name { get => name; protected set => name = value; }
 
-        public abstract string GetNameFromDeclarationSyntax(MemberDeclarationSyntax memberDeclarationSyntax);
+        public string GetNameFromDeclarationSyntax(MemberDeclarationSyntax memberDeclarationSyntax)
+        {
+            return GetNameFromDeclarationSyntaxCore(memberDeclarationSyntax);
+        }
 
-        public virtual TreeViewItem ToUIControl()
+        protected abstract string GetNameFromDeclarationSyntaxCore(MemberDeclarationSyntax memberDeclarationSyntax);
+
+        public TreeViewItem ToUIControl()
+        {
+            return ToUIControlCore();
+        }
+
+        protected virtual TreeViewItem ToUIControlCore()
         {
             var treeViewItem = new TreeViewItem();
             treeViewItem.IsExpanded = true;

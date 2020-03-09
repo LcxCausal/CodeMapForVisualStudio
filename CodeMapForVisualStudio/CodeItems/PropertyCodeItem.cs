@@ -19,7 +19,7 @@ namespace CodeMapForVisualStudio
             if (propertyDeclarationSyntax == null)
                 return;
 
-            accessors = string.Join(" ", propertyDeclarationSyntax.AccessorList.Accessors.Select(a => a.Keyword.ValueText));
+            accessors = string.Join("; ", propertyDeclarationSyntax.AccessorList.Accessors.Select(a => a.Keyword.ValueText));
             propertyType = propertyDeclarationSyntax.Type.ToString();
         }
 
@@ -27,7 +27,7 @@ namespace CodeMapForVisualStudio
 
         public string PropertyType { get => propertyType; }
 
-        public override string GetNameFromDeclarationSyntax(MemberDeclarationSyntax memberDeclarationSyntax)
+        protected override string GetNameFromDeclarationSyntaxCore(MemberDeclarationSyntax memberDeclarationSyntax)
         {
             return memberDeclarationSyntax != null && memberDeclarationSyntax is PropertyDeclarationSyntax propertyDeclarationSyntax ?
                 propertyDeclarationSyntax.Identifier.ValueText :
@@ -36,7 +36,7 @@ namespace CodeMapForVisualStudio
 
         public override string ToString()
         {
-            return $"{string.Join(" ", Modifiers)} {propertyType} {Name}: {accessors}";
+            return $"{string.Join(" ", Modifiers)} {propertyType} {Name}: {{ {accessors} }}";
         }
     }
 }
