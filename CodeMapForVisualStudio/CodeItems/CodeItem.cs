@@ -11,7 +11,8 @@ namespace CodeMapForVisualStudio
 {
     public abstract class CodeItem
     {
-        private readonly double scaleFactor;
+        private const float fontSize = 15;
+
         private readonly TextSelection selection;
 
         private Location locaion;
@@ -28,7 +29,6 @@ namespace CodeMapForVisualStudio
                 return;
 
             this.selection = selection;
-            scaleFactor = PresentationSource.FromVisual(Application.Current.MainWindow).CompositionTarget.TransformToDevice.M11;
             Location = memberDeclarationSyntax.GetLocation();
             Modifiers = memberDeclarationSyntax.Modifiers.Select(m => m.ValueText);
             Name = GetNameFromDeclarationSyntax(memberDeclarationSyntax);
@@ -48,7 +48,7 @@ namespace CodeMapForVisualStudio
             treeViewItem.IsExpanded = true;
             treeViewItem.Header = ToString();
             treeViewItem.FontFamily = new FontFamily("Times New Roman");
-            treeViewItem.FontSize = 10 * scaleFactor;
+            treeViewItem.FontSize = fontSize;
             treeViewItem.Foreground = new SolidColorBrush(Color.FromArgb(255, 196, 196, 196));
 
             treeViewItem.MouseEnter += TreeViewItem_MouseEnter;
@@ -72,13 +72,13 @@ namespace CodeMapForVisualStudio
         private void TreeViewItem_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             var treeViewItem = (TreeViewItem)sender;
-            treeViewItem.FontSize = 10 * scaleFactor;
+            treeViewItem.FontSize = fontSize;
         }
 
         private void TreeViewItem_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             var treeViewItem = (TreeViewItem)sender;
-            treeViewItem.FontSize = 10.5 * scaleFactor;
+            treeViewItem.FontSize = fontSize + 1;
         }
 
         public override string ToString()
