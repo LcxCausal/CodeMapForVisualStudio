@@ -38,7 +38,12 @@ namespace CodeMapForVisualStudio
 
         public override string ToString()
         {
-            return $"{string.Join(" ", Modifiers)} {returnType} {Name}({parameters})";
+            return $"{Name}({parameters}): {returnType}";
+        }
+
+        protected override string GetCodeTypeCore()
+        {
+            return "Method";
         }
     }
 }

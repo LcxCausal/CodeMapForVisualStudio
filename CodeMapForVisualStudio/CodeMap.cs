@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using EnvDTE;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text;
@@ -11,6 +10,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Collections.ObjectModel;
 
 namespace CodeMapForVisualStudio
 {
@@ -98,15 +98,17 @@ namespace CodeMapForVisualStudio
         private void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            UpdateCodeMap(GotFocus.Document);
+
+            if (GotFocus != LostFocus)
+                UpdateCodeMap(GotFocus.Document);
         }
 
-        private async void DocumentEvents_DocumentOpened(Document document)
+        private void DocumentEvents_DocumentOpened(Document document)
         {
             UpdateCodeMap(document);
         }
 
-        private async void DocumentEvents_DocumentSaved(Document document)
+        private void DocumentEvents_DocumentSaved(Document document)
         {
             UpdateCodeMap(document);
         }
@@ -125,7 +127,7 @@ namespace CodeMapForVisualStudio
                 codeTree.Items.Add(codeItem.ToUIControl());
         }
 
-        private static async Task<List<CodeItem>> MapDocumentAsync(Document document)
+        private static async Task<Collection<CodeItem>> MapDocumentAsync(Document document)
         {
             try
             {
@@ -136,16 +138,16 @@ namespace CodeMapForVisualStudio
                 var csTree = CSharpSyntaxTree.ParseText(currentText);
                 var syntaxRoot = await csTree.GetRootAsync();
 
-                if (!InternalHelper.SupportedLanguages.Contains(syntaxRoot.Language))
+                if (!ExternalHelper.SupportedLanguages.Contains(syntaxRoot.Language))
                     return null;
 
-                var codeItems = new List<CodeItem>();
+                var codeItems = new Collection<CodeItem>();
                 var classNodes = syntaxRoot.DescendantNodes().OfType<ClassDeclarationSyntax>();
 
                 foreach (var classNode in classNodes)
                     codeItems.Add(new ClassCodeItem(classNode, document.Selection as TextSelection));
 
-                return codeItems;
+                return ExternalHelper.OrderCodeItems(codeItems);
             }
             catch
             {

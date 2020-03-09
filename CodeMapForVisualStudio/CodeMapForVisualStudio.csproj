@@ -63,7 +63,7 @@
       <DependentUpon>CodeMapControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="CodeMapPackage.cs" />
-    <Compile Include="InternalHelper.cs" />
+    <Compile Include="ExternalHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

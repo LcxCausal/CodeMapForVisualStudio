@@ -31,7 +31,12 @@ namespace CodeMapForVisualStudio
 
         public override string ToString()
         {
-            return $"{string.Join(" ", Modifiers)} {fieldType} {Name}";
+            return $"{Name}: {fieldType}";
+        }
+
+        protected override string GetCodeTypeCore()
+        {
+            return "Field";
         }
     }
 }

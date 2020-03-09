@@ -36,7 +36,12 @@ namespace CodeMapForVisualStudio
 
         public override string ToString()
         {
-            return $"{string.Join(" ", Modifiers)} {propertyType} {Name}: {{ {accessors} }}";
+            return $"{Name} {{ {accessors} }}: {propertyType}";
+        }
+
+        protected override string GetCodeTypeCore()
+        {
+            return "Property";
         }
     }
 }

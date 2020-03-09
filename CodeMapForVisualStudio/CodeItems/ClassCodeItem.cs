@@ -1,20 +1,12 @@
 ﻿using EnvDTE;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using System.Linq;
 
 namespace CodeMapForVisualStudio
 {
     public class ClassCodeItem : CodeItem
     {
-        private const string privateTag = "private";
-        private const string internalTag = "internal";
-        private const string protectedInternalTag = "protected internal";
-        private const string protectedTag = "protected";
-        private const string publicTag = "public";
-
         private readonly Collection<CodeItem> memberCodeItems;
 
         public ClassCodeItem(ClassDeclarationSyntax classDeclarationSyntax, TextSelection selection)
@@ -42,15 +34,15 @@ namespace CodeMapForVisualStudio
 
             memberCodeItems = new Collection<CodeItem>();
 
-            foreach (var field in OrderCodeItems(fields))
+            foreach (var field in ExternalHelper.OrderCodeItems(fields))
                 memberCodeItems.Add(field);
-            foreach (var constructor in OrderCodeItems(constructors))
+            foreach (var constructor in ExternalHelper.OrderCodeItems(constructors))
                 memberCodeItems.Add(constructor);
-            foreach (var property in OrderCodeItems(properties))
+            foreach (var property in ExternalHelper.OrderCodeItems(properties))
                 memberCodeItems.Add(property);
-            foreach (var method in OrderCodeItems(methods))
+            foreach (var method in ExternalHelper.OrderCodeItems(methods))
                 memberCodeItems.Add(method);
-            foreach (var classItem in OrderCodeItems(classes))
+            foreach (var classItem in ExternalHelper.OrderCodeItems(classes))
                 memberCodeItems.Add(classItem);
 
             fields.Clear();
@@ -71,6 +63,7 @@ namespace CodeMapForVisualStudio
         protected override TreeViewItem ToUIControlCore()
         {
             var treeViewItem = base.ToUIControlCore();
+            treeViewItem.FontWeight = System.Windows.FontWeights.Bold;
 
             foreach (var codeItem in memberCodeItems)
                 treeViewItem.Items.Add(codeItem.ToUIControl());
@@ -80,89 +73,12 @@ namespace CodeMapForVisualStudio
 
         public override string ToString()
         {
-            return $"{string.Join(" ", Modifiers)} class {Name}";
+            return $"{Name}: class";
         }
 
-        private Collection<CodeItem> OrderCodeItems(Collection<CodeItem> codeItems)
+        protected override string GetCodeTypeCore()
         {
-            var privates = new Dictionary<string, Collection<CodeItem>>();
-            var internals = new Dictionary<string, Collection<CodeItem>>();
-            var protectedInternals = new Dictionary<string, Collection<CodeItem>>();
-            var protecteds = new Dictionary<string, Collection<CodeItem>>();
-            var publics = new Dictionary<string, Collection<CodeItem>>();
-
-            foreach (var codeItem in codeItems.OrderBy(i => i.Name))
-            {
-                Collection<CodeItem> tempCodeItems = null;
-                var modifiers = string.Join(" ", codeItem.Modifiers);
-
-                if (modifiers.StartsWith(privateTag))
-                {
-                    if (!privates.ContainsKey(modifiers))
-                        privates[modifiers] = new Collection<CodeItem>();
-                    tempCodeItems = privates[modifiers];
-                }
-                else if (modifiers.StartsWith(protectedInternalTag))
-                {
-                    if (!protectedInternals.ContainsKey(modifiers))
-                        protectedInternals[modifiers] = new Collection<CodeItem>();
-                    tempCodeItems = protectedInternals[modifiers];
-                }
-                else if (modifiers.StartsWith(protectedTag))
-                {
-                    if (!protecteds.ContainsKey(modifiers))
-                        protecteds[modifiers] = new Collection<CodeItem>();
-                    tempCodeItems = protecteds[modifiers];
-                }
-                else if (modifiers.StartsWith(publicTag))
-                {
-                    if (!publics.ContainsKey(modifiers))
-                        publics[modifiers] = new Collection<CodeItem>();
-                    tempCodeItems = publics[modifiers];
-                }
-                else
-                {
-                    if (!internals.ContainsKey(modifiers))
-                        internals[modifiers] = new Collection<CodeItem>();
-                    tempCodeItems = internals[modifiers];
-                }
-
-                tempCodeItems.Add(codeItem);
-            }
-
-            var returnCodeItems = new Collection<CodeItem>();
-            foreach (var items in publics.Where(i => !i.Key.Equals(publicTag)).OrderBy(i => i.Key))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-            foreach (var items in publics.Where(i => i.Key.Equals(publicTag)))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-            foreach (var items in protecteds.Where(i => !i.Key.Equals(protectedTag)).OrderBy(i => i.Key))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-            foreach (var items in protecteds.Where(i => i.Key.Equals(protectedTag)))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-            foreach (var items in protectedInternals.Where(i => !i.Key.Equals(protectedTag)).OrderBy(i => i.Key))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-            foreach (var items in protectedInternals.Where(i => i.Key.Equals(protectedInternalTag)))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-            foreach (var items in internals.Where(i => !i.Key.Equals(internalTag)).OrderBy(i => i.Key))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-            foreach (var items in internals.Where(i => i.Key.Equals(internalTag)))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-            foreach (var items in privates.Where(i => !i.Key.Equals(privateTag)).OrderBy(i => i.Key))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-            foreach (var items in privates.Where(i => i.Key.Equals(privateTag)))
-                foreach (var item in items.Value)
-                    returnCodeItems.Add(item);
-
-            return returnCodeItems;
+            return "Class";
         }
     }
 }
