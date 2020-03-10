@@ -79,15 +79,20 @@ namespace CodeMapForVisualStudio
 
             var codeMapPackage = Package as CodeMapPackage;
 
-            // Bind window activeted event.
+            // Bind window activeted and closing event.
             var windowEvents = codeMapPackage.DTE.Events.WindowEvents;
             windowEvents.WindowActivated += WindowEvents_WindowActivated;
+            windowEvents.WindowClosing += WindowEvents_WindowClosing;
 
             // Bind document saved, opened and closing events.
             var documentEvents = codeMapPackage.DTE.Events.DocumentEvents;
             documentEvents.DocumentSaved += DocumentEvents_DocumentSaved;
             documentEvents.DocumentOpened += DocumentEvents_DocumentOpened;
-            documentEvents.DocumentClosing += DocumentEvents_DocumentClosing;
+        }
+
+        private void WindowEvents_WindowClosing(Window Window)
+        {
+            codeMap.Content = null;
         }
 
         private void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)
@@ -98,8 +103,7 @@ namespace CodeMapForVisualStudio
             if (viewHost != null)
                 viewHost.TextView.Caret.PositionChanged += Caret_PositionChanged;
 
-            if (GotFocus != LostFocus)
-                UpdateCodeMap(GotFocus.Document);
+            UpdateCodeMap(GotFocus.Document);
         }
 
         private void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e)
@@ -121,11 +125,6 @@ namespace CodeMapForVisualStudio
         private void DocumentEvents_DocumentSaved(Document document)
         {
             UpdateCodeMap(document);
-        }
-
-        private void DocumentEvents_DocumentClosing(Document Document)
-        {
-            codeMap.Content = null;
         }
 
         private async void UpdateCodeMap(Document document)
