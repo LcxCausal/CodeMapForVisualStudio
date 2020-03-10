@@ -71,6 +71,7 @@ namespace CodeMapForVisualStudio
         {
             var treeViewItem = new TreeViewItem();
             treeViewItem.HeaderTemplate = CreateDataTemplate();
+            treeViewItem.Tag = location.SourceSpan;
             treeViewItem.IsExpanded = true;
 
             treeViewItem.MouseEnter += TreeViewItem_MouseEnter;
@@ -130,32 +131,15 @@ namespace CodeMapForVisualStudio
         private void TreeViewItem_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             var treeViewItem = (TreeViewItem)sender;
-            treeViewItem.HeaderTemplate = CreateDataTemplateCore();
+            treeViewItem.Background = Brushes.Transparent;
         }
 
         private void TreeViewItem_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            var stackPanel = new FrameworkElementFactory(typeof(StackPanel));
-            stackPanel.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
-
-            var imageMoniker = new FrameworkElementFactory(typeof(CrispImage));
-            imageMoniker.SetValue(CrispImage.MonikerProperty, ImageMoniker);
-            stackPanel.AppendChild(imageMoniker);
-
-            var text = new FrameworkElementFactory(typeof(TextBlock));
-            text.SetValue(TextBlock.TextProperty, ToString());
-            text.SetValue(TextBlock.FontFamilyProperty, new FontFamily(ExternalHelper.fontFamilyName));
-            text.SetValue(TextBlock.FontSizeProperty, ExternalHelper.fontSize + 1);
-            text.SetValue(TextBlock.ForegroundProperty, brush);
-            text.SetValue(TextBlock.FontWeightProperty, ExternalHelper.fontWeight);
-            text.SetValue(FrameworkElement.MarginProperty, new Thickness(ExternalHelper.leftMargin, ExternalHelper.topMargin, ExternalHelper.rightMargin, ExternalHelper.bottomMargin));
-            stackPanel.AppendChild(text);
-
-            var dataTemplate = new DataTemplate();
-            dataTemplate.VisualTree = stackPanel;
-
             var treeViewItem = (TreeViewItem)sender;
-            treeViewItem.HeaderTemplate = dataTemplate;
+
+            if (!treeViewItem.HasItems)
+                treeViewItem.Background = ExternalHelper.maskBrush;
         }
     }
 }

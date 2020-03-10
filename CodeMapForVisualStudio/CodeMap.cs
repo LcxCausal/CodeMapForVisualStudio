@@ -11,6 +11,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.Editor;
 
 namespace CodeMapForVisualStudio
 {
@@ -30,9 +33,6 @@ namespace CodeMapForVisualStudio
     public class CodeMap : ToolWindowPane
     {
         private readonly ScrollViewer codeMap;
-
-        private WindowEvents windowEvents;
-        private DocumentEvents documentEvents;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeMap"/> class.
@@ -79,28 +79,38 @@ namespace CodeMapForVisualStudio
 
             var codeMapPackage = Package as CodeMapPackage;
 
-            // Bind window activeted events.
-            windowEvents = codeMapPackage.DTE.Events.WindowEvents;
-            windowEvents.WindowClosing += WindowEvents_WindowClosing;
+            // Bind window activeted event.
+            var windowEvents = codeMapPackage.DTE.Events.WindowEvents;
             windowEvents.WindowActivated += WindowEvents_WindowActivated;
 
-            // Bind document saved and opened events.
-            documentEvents = codeMapPackage.DTE.Events.DocumentEvents;
+            // Bind document saved, opened and closing events.
+            var documentEvents = codeMapPackage.DTE.Events.DocumentEvents;
             documentEvents.DocumentSaved += DocumentEvents_DocumentSaved;
             documentEvents.DocumentOpened += DocumentEvents_DocumentOpened;
-        }
-
-        private void WindowEvents_WindowClosing(Window Window)
-        {
-            codeMap.Content = null;
+            documentEvents.DocumentClosing += DocumentEvents_DocumentClosing;
         }
 
         private void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
+            var viewHost = GetCurrentViewHost();
+            if (viewHost != null)
+                viewHost.TextView.Caret.PositionChanged += Caret_PositionChanged;
+
             if (GotFocus != LostFocus)
                 UpdateCodeMap(GotFocus.Document);
+        }
+
+        private void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e)
+        {
+            var position = e.NewPosition.BufferPosition.Position;
+            var matchedTreeViewItem = MatchTreeViewItem(position);
+
+            ClearCodeMapMask();
+
+            if (matchedTreeViewItem != null)
+                matchedTreeViewItem.Background = ExternalHelper.maskBrush;
         }
 
         private void DocumentEvents_DocumentOpened(Document document)
@@ -111,6 +121,11 @@ namespace CodeMapForVisualStudio
         private void DocumentEvents_DocumentSaved(Document document)
         {
             UpdateCodeMap(document);
+        }
+
+        private void DocumentEvents_DocumentClosing(Document Document)
+        {
+            codeMap.Content = null;
         }
 
         private async void UpdateCodeMap(Document document)
@@ -155,11 +170,6 @@ namespace CodeMapForVisualStudio
             }
         }
 
-        /// <summary>
-        /// Get the FullName/FilePath for the given document
-        /// </summary>
-        /// <param name="document">the document</param>
-        /// <returns></returns>
         private static string GetFullName(Document document)
         {
             var name = string.Empty;
@@ -171,21 +181,72 @@ namespace CodeMapForVisualStudio
                 System.Windows.Threading.Dispatcher.CurrentDispatcher.VerifyAccess();
                 name = document.FullName;
             }
-            catch (COMException)
-            {
-                // Catastrophic failure (Exception from HRESULT: 0x8000FFFF (E_UNEXPECTED))
-                // We have other ways to try and map this document
-            }
-            catch (ArgumentException)
-            {
-                // The parameter is incorrect. (Exception from HRESULT: 0x80070057 (E_INVALIDARG))
-                // We have other ways to try and map this document
-            }
             catch (Exception e)
             {
                 throw new Exception($"Error getting FullName for document.", e);
             }
             return name;
+        }
+
+        private IWpfTextViewHost GetCurrentViewHost()
+        {
+            var textManager = (IVsTextManager)GetService(typeof(SVsTextManager));
+            textManager.GetActiveView(1, null, out var textView);
+
+            if (!(textView is IVsUserData userData))
+                return null;
+            else
+            {
+                var guidViewHost = DefGuidList.guidIWpfTextViewHost;
+                userData.GetData(ref guidViewHost, out var holder);
+                return (IWpfTextViewHost)holder;
+            }
+        }
+
+        private TreeViewItem MatchTreeViewItem(int position)
+        {
+            var treeViewItems = ((TreeView)codeMap.Content).Items;
+            return treeViewItems == null || treeViewItems.Count == 0 ? null : MatchTreeViewItemCore(position, treeViewItems);
+        }
+
+        private TreeViewItem MatchTreeViewItemCore(int position, ItemCollection treeViewItems)
+        {
+            foreach (TreeViewItem treeViewItem in treeViewItems)
+            {
+                if (!treeViewItem.HasItems)
+                {
+                    var sourceSpan = (Microsoft.CodeAnalysis.Text.TextSpan)treeViewItem.Tag;
+                    if (position >= sourceSpan.Start && position <= sourceSpan.End)
+                        return treeViewItem;
+                }
+                else
+                {
+                    var returnTreeViewItem = MatchTreeViewItemCore(position, treeViewItem.Items);
+                    if (returnTreeViewItem != null)
+                        return returnTreeViewItem;
+                }
+            }
+
+            return null;
+        }
+
+        private void ClearCodeMapMask()
+        {
+            var treeViewItems = ((TreeView)codeMap.Content).Items;
+            if (treeViewItems == null || treeViewItems.Count == 0)
+                return;
+
+            ClearCodeMapMaskCore(treeViewItems);
+        }
+
+        private void ClearCodeMapMaskCore(ItemCollection treeViewItems)
+        {
+            foreach (TreeViewItem treeViewItem in treeViewItems)
+            {
+                treeViewItem.Background = Brushes.Transparent;
+                if (treeViewItem.HasItems)
+                    ClearCodeMapMaskCore(treeViewItem.Items);
+            }
         }
     }
 }

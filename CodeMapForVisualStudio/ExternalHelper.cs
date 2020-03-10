@@ -10,11 +10,14 @@ namespace CodeMapForVisualStudio
 {
     public static class ExternalHelper
     {
+        public static readonly Brush maskBrush = new SolidColorBrush(Color.FromArgb(100, 0, 168, 255));
         public static readonly Brush privateBrush = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
         public static readonly Brush internalBrush = new SolidColorBrush(Color.FromArgb(255, 172, 172, 172));
         public static readonly Brush protectedBrush = new SolidColorBrush(Color.FromArgb(255, 184, 184, 184));
         public static readonly Brush publicBrush = new SolidColorBrush(Color.FromArgb(255, 196, 196, 196));
+
         public static string[] SupportedLanguages = new string[] { "C#" };
+
         public static string fontFamilyName = "Times New Roman";
         public static double fontSize = 15;
         public static FontWeight fontWeight = FontWeights.Normal;
