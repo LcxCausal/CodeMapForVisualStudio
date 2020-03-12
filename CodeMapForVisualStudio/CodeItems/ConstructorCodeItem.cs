@@ -12,8 +12,12 @@ namespace CodeMapForVisualStudio
             : this(null, null)
         { }
 
-        public ConstructorCodeItem(ConstructorDeclarationSyntax constructorDeclarationSyntax, TextSelection selection) : base(constructorDeclarationSyntax, selection)
+        public ConstructorCodeItem(ConstructorDeclarationSyntax constructorDeclarationSyntax, TextSelection selection)
+            : base(constructorDeclarationSyntax, selection)
         {
+            if (constructorDeclarationSyntax == null)
+                return;
+
             var parametersBuilder = new Collection<string>();
             foreach (var parameter in constructorDeclarationSyntax.ParameterList.Parameters)
                 parametersBuilder.Add($"{parameter.Type.ToString()} {parameter.Identifier.ValueText}");
@@ -35,6 +39,11 @@ namespace CodeMapForVisualStudio
         protected override string GetCodeTypeCore()
         {
             return "Method";
+        }
+
+        protected override string MappingDeclarationSyntaxCore()
+        {
+            return typeof(ConstructorDeclarationSyntax).FullName;
         }
     }
 }

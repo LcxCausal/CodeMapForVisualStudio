@@ -32,7 +32,7 @@ namespace CodeMapForVisualStudio
                 return;
 
             this.selection = selection;
-            this.brush = ExternalHelper.publicBrush;
+            this.brush = ExternalHelper.PublicBrush;
             this.imageMoniker = KnownMonikers.QuestionMark;
 
             this.location = memberDeclarationSyntax.GetLocation();
@@ -97,11 +97,11 @@ namespace CodeMapForVisualStudio
 
             var text = new FrameworkElementFactory(typeof(TextBlock));
             text.SetValue(TextBlock.TextProperty, ToString());
-            text.SetValue(TextBlock.FontFamilyProperty, new FontFamily(ExternalHelper.fontFamilyName));
-            text.SetValue(TextBlock.FontSizeProperty, ExternalHelper.fontSize);
+            text.SetValue(TextBlock.FontFamilyProperty, new FontFamily(ExternalHelper.FontFamilyName));
+            text.SetValue(TextBlock.FontSizeProperty, ExternalHelper.FontSize);
             text.SetValue(TextBlock.ForegroundProperty, brush);
-            text.SetValue(TextBlock.FontWeightProperty, ExternalHelper.fontWeight);
-            text.SetValue(FrameworkElement.MarginProperty, new Thickness(ExternalHelper.leftMargin, ExternalHelper.topMargin, ExternalHelper.rightMargin, ExternalHelper.bottomMargin));
+            text.SetValue(TextBlock.FontWeightProperty, ExternalHelper.FontWeight);
+            text.SetValue(FrameworkElement.MarginProperty, new Thickness(ExternalHelper.LeftMargin, ExternalHelper.TopMargin, ExternalHelper.RightMargin, ExternalHelper.BottomMargin));
             stackPanel.AppendChild(text);
 
             var dataTemplate = new DataTemplate();
@@ -116,6 +116,13 @@ namespace CodeMapForVisualStudio
         }
 
         protected abstract string GetCodeTypeCore();
+
+        internal string MappingDeclarationSyntax()
+        {
+            return MappingDeclarationSyntaxCore();
+        }
+
+        protected abstract string MappingDeclarationSyntaxCore();
 
         private void TreeViewItem_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -139,7 +146,7 @@ namespace CodeMapForVisualStudio
             var treeViewItem = (TreeViewItem)sender;
 
             if (!treeViewItem.HasItems)
-                treeViewItem.Background = ExternalHelper.maskBrush;
+                treeViewItem.Background = ExternalHelper.MaskBrush;
         }
     }
 }

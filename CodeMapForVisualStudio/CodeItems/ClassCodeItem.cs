@@ -1,7 +1,11 @@
 ﻿using EnvDTE;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using System.Windows.Controls;
+using System.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace CodeMapForVisualStudio
 {
@@ -9,46 +13,47 @@ namespace CodeMapForVisualStudio
     {
         private readonly Collection<CodeItem> memberCodeItems;
 
+        private ClassCodeItem()
+            : this(null, null)
+        { }
+
         public ClassCodeItem(ClassDeclarationSyntax classDeclarationSyntax, TextSelection selection)
             : base(classDeclarationSyntax, selection)
         {
-            var fields = new Collection<CodeItem>();
-            var constructors = new Collection<CodeItem>();
-            var properties = new Collection<CodeItem>();
-            var methods = new Collection<CodeItem>();
-            var classes = new Collection<CodeItem>();
+            if (classDeclarationSyntax == null)
+                return;
 
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var codeItemType = executingAssembly.GetType(typeof(CodeItem).FullName, true, true);
+            var types = executingAssembly.GetTypes().Where(t => t.IsSubclassOf(codeItemType));
+            var mappedTypes = new Dictionary<string, Type>();
+            foreach (var type in types)
+            {
+                var constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, Type.EmptyTypes, null);
+                var instance = constructor.Invoke(new object[0]);
+                var declarationSyntax = type.GetMethod(ExternalHelper.MappingDeclarationSyntaxMethodName, BindingFlags.Instance | BindingFlags.NonPublic).Invoke(instance, null).ToString();
+                mappedTypes[declarationSyntax] = type;
+            }
+
+            var tempMemberCodeItems = new Dictionary<string, Collection<CodeItem>>();
             foreach (var memberDeclarationSyntax in classDeclarationSyntax.Members)
             {
-                if (memberDeclarationSyntax is FieldDeclarationSyntax fieldDeclarationSyntax)
-                    fields.Add(new FieldCodeItem(fieldDeclarationSyntax, selection));
-                else if (memberDeclarationSyntax is ConstructorDeclarationSyntax constructorDeclarationSyntax)
-                    constructors.Add(new ConstructorCodeItem(constructorDeclarationSyntax, selection));
-                else if (memberDeclarationSyntax is PropertyDeclarationSyntax propertyDeclarationSyntax)
-                    properties.Add(new PropertyCodeItem(propertyDeclarationSyntax, selection));
-                else if (memberDeclarationSyntax is MethodDeclarationSyntax methodDeclarationSyntax)
-                    methods.Add(new MethodCodeItem(methodDeclarationSyntax, selection));
-                else if (memberDeclarationSyntax is ClassDeclarationSyntax subClassDeclarationSyntax)
-                    classes.Add(new ClassCodeItem(subClassDeclarationSyntax, selection));
+                var typeName = memberDeclarationSyntax.GetType().FullName;
+                if (mappedTypes.ContainsKey(typeName))
+                {
+                    var mappedCodeItemType = mappedTypes[typeName];
+                    if (!tempMemberCodeItems.ContainsKey(mappedCodeItemType.FullName))
+                        tempMemberCodeItems[mappedCodeItemType.FullName] = new Collection<CodeItem>();
+                    tempMemberCodeItems[mappedCodeItemType.FullName].Add((CodeItem)mappedTypes[typeName].GetConstructors()[0].Invoke(new object[] { memberDeclarationSyntax, selection }));
+                }
             }
 
             memberCodeItems = new Collection<CodeItem>();
+            foreach (var items in tempMemberCodeItems.OrderBy(a => ExternalHelper.CodeItemsSequence[a.Key]))
+                foreach (var item in ExternalHelper.OrderCodeItems(items.Value))
+                    memberCodeItems.Add(item);
 
-            foreach (var field in ExternalHelper.OrderCodeItems(fields))
-                memberCodeItems.Add(field);
-            foreach (var constructor in ExternalHelper.OrderCodeItems(constructors))
-                memberCodeItems.Add(constructor);
-            foreach (var property in ExternalHelper.OrderCodeItems(properties))
-                memberCodeItems.Add(property);
-            foreach (var method in ExternalHelper.OrderCodeItems(methods))
-                memberCodeItems.Add(method);
-            foreach (var classItem in ExternalHelper.OrderCodeItems(classes))
-                memberCodeItems.Add(classItem);
-
-            fields.Clear();
-            properties.Clear();
-            methods.Clear();
-            classes.Clear();
+            tempMemberCodeItems.Clear();
         }
 
         public Collection<CodeItem> MemberCodeItems { get => memberCodeItems; }
@@ -79,6 +84,11 @@ namespace CodeMapForVisualStudio
         protected override string GetCodeTypeCore()
         {
             return "Class";
+        }
+
+        protected override string MappingDeclarationSyntaxCore()
+        {
+            return typeof(ClassDeclarationSyntax).FullName;
         }
     }
 }

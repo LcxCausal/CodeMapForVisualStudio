@@ -38,5 +38,10 @@ namespace CodeMapForVisualStudio
         {
             return "Field";
         }
+
+        protected override string MappingDeclarationSyntaxCore()
+        {
+            return typeof(FieldDeclarationSyntax).FullName;
+        }
     }
 }

@@ -45,5 +45,10 @@ namespace CodeMapForVisualStudio
         {
             return "Method";
         }
+
+        protected override string MappingDeclarationSyntaxCore()
+        {
+            return typeof(MethodDeclarationSyntax).FullName;
+        }
     }
 }

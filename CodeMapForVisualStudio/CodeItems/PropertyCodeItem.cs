@@ -43,5 +43,10 @@ namespace CodeMapForVisualStudio
         {
             return "Property";
         }
+
+        protected override string MappingDeclarationSyntaxCore()
+        {
+            return typeof(PropertyDeclarationSyntax).FullName;
+        }
     }
 }

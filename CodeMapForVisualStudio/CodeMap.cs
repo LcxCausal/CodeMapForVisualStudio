@@ -114,7 +114,7 @@ namespace CodeMapForVisualStudio
             ClearCodeMapMask();
 
             if (matchedTreeViewItem != null)
-                matchedTreeViewItem.Background = ExternalHelper.maskBrush;
+                matchedTreeViewItem.Background = ExternalHelper.MaskBrush;
         }
 
         private void DocumentEvents_DocumentOpened(Document document)

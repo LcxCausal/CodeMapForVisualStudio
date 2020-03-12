@@ -10,21 +10,31 @@ namespace CodeMapForVisualStudio
 {
     public static class ExternalHelper
     {
-        public static readonly Brush maskBrush = new SolidColorBrush(Color.FromArgb(100, 0, 168, 255));
-        public static readonly Brush privateBrush = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
-        public static readonly Brush internalBrush = new SolidColorBrush(Color.FromArgb(255, 172, 172, 172));
-        public static readonly Brush protectedBrush = new SolidColorBrush(Color.FromArgb(255, 184, 184, 184));
-        public static readonly Brush publicBrush = new SolidColorBrush(Color.FromArgb(255, 196, 196, 196));
+        public static readonly Brush MaskBrush = new SolidColorBrush(Color.FromArgb(100, 0, 168, 255));
+        public static readonly Brush PrivateBrush = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
+        public static readonly Brush InternalBrush = new SolidColorBrush(Color.FromArgb(255, 172, 172, 172));
+        public static readonly Brush ProtectedBrush = new SolidColorBrush(Color.FromArgb(255, 184, 184, 184));
+        public static readonly Brush PublicBrush = new SolidColorBrush(Color.FromArgb(255, 196, 196, 196));
 
         public static string[] SupportedLanguages = new string[] { "C#" };
+        public static Dictionary<string, int> CodeItemsSequence = new Dictionary<string, int>
+        {
+            { typeof(FieldCodeItem).FullName, 0 },
+            { typeof(ConstructorCodeItem).FullName, 1 },
+            { typeof(PropertyCodeItem).FullName, 2 },
+            { typeof(MethodCodeItem).FullName, 3 },
+            { typeof(ClassCodeItem).FullName, 4 }
+        };
 
-        public static string fontFamilyName = "Times New Roman";
-        public static double fontSize = 15;
-        public static FontWeight fontWeight = FontWeights.Normal;
-        public static double leftMargin = 4;
-        public static double topMargin = 1;
-        public static double rightMargin = 1;
-        public static double bottomMargin = 1;
+        public static string FontFamilyName = "Times New Roman";
+        public static double FontSize = 15;
+        public static FontWeight FontWeight = FontWeights.Normal;
+        public static double LeftMargin = 4;
+        public static double TopMargin = 1;
+        public static double RightMargin = 1;
+        public static double BottomMargin = 1;
+
+        internal static readonly string MappingDeclarationSyntaxMethodName = "MappingDeclarationSyntax";
 
         internal static readonly string privateTag = "private";
         internal static readonly string protectedInternalTag = "protected internal";
@@ -103,7 +113,7 @@ namespace CodeMapForVisualStudio
                 foreach (var item in items.Value)
                 {
                     item.ImageMoniker = GetKnownMonikers($"{item.GetCodeType()}Protected");
-                    item.Brush = ExternalHelper.protectedBrush;
+                    item.Brush = ExternalHelper.ProtectedBrush;
                     returnCodeItems.Add(item);
                 }
             }
@@ -112,7 +122,7 @@ namespace CodeMapForVisualStudio
                 foreach (var item in items.Value)
                 {
                     item.ImageMoniker = GetKnownMonikers($"{item.GetCodeType()}Protected");
-                    item.Brush = protectedBrush;
+                    item.Brush = ProtectedBrush;
                     returnCodeItems.Add(item);
                 }
             }
@@ -122,7 +132,7 @@ namespace CodeMapForVisualStudio
                 foreach (var item in items.Value)
                 {
                     item.ImageMoniker = GetKnownMonikers($"{item.GetCodeType()}Internal");
-                    item.Brush = internalBrush;
+                    item.Brush = InternalBrush;
                     returnCodeItems.Add(item);
                 }
             }
@@ -131,7 +141,7 @@ namespace CodeMapForVisualStudio
                 foreach (var item in items.Value)
                 {
                     item.ImageMoniker = GetKnownMonikers($"{item.GetCodeType()}Internal");
-                    item.Brush = internalBrush;
+                    item.Brush = InternalBrush;
                     returnCodeItems.Add(item);
                 }
             }
@@ -141,7 +151,7 @@ namespace CodeMapForVisualStudio
                 foreach (var item in items.Value)
                 {
                     item.ImageMoniker = GetKnownMonikers($"{item.GetCodeType()}Internal");
-                    item.Brush = internalBrush;
+                    item.Brush = InternalBrush;
                     returnCodeItems.Add(item);
                 }
             }
@@ -150,7 +160,7 @@ namespace CodeMapForVisualStudio
                 foreach (var item in items.Value)
                 {
                     item.ImageMoniker = GetKnownMonikers($"{item.GetCodeType()}Internal");
-                    item.Brush = internalBrush;
+                    item.Brush = InternalBrush;
                     returnCodeItems.Add(item);
                 }
             }
@@ -160,7 +170,7 @@ namespace CodeMapForVisualStudio
                 foreach (var item in items.Value)
                 {
                     item.ImageMoniker = GetKnownMonikers($"{item.GetCodeType()}Private");
-                    item.Brush = privateBrush;
+                    item.Brush = PrivateBrush;
                     returnCodeItems.Add(item);
                 }
             }
@@ -169,7 +179,7 @@ namespace CodeMapForVisualStudio
                 foreach (var item in items.Value)
                 {
                     item.ImageMoniker = GetKnownMonikers($"{item.GetCodeType()}Private");
-                    item.Brush = privateBrush;
+                    item.Brush = PrivateBrush;
                     returnCodeItems.Add(item);
                 }
             }
