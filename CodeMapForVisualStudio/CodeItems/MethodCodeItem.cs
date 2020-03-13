@@ -27,8 +27,6 @@ namespace CodeMapForVisualStudio
             parameters = string.Join(", ", parametersBuilder);
         }
 
-        public string ReturnType { get => returnType; }
-
         protected override string GetNameFromDeclarationSyntaxCore(MemberDeclarationSyntax memberDeclarationSyntax)
         {
             return memberDeclarationSyntax != null && memberDeclarationSyntax is MethodDeclarationSyntax methodDeclarationSyntax ?

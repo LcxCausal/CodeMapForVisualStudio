@@ -23,10 +23,6 @@ namespace CodeMapForVisualStudio
             propertyType = propertyDeclarationSyntax.Type.ToString();
         }
 
-        public string Accessors { get => accessors; }
-
-        public string PropertyType { get => propertyType; }
-
         protected override string GetNameFromDeclarationSyntaxCore(MemberDeclarationSyntax memberDeclarationSyntax)
         {
             return memberDeclarationSyntax != null && memberDeclarationSyntax is PropertyDeclarationSyntax propertyDeclarationSyntax ?

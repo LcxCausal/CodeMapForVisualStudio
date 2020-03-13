@@ -52,11 +52,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CodeItems\ClassCodeItem.cs" />
-    <Compile Include="CodeItems\CodeItem.cs" />
+    <Compile Include="CodeItems\Advance\CodeItem.cs" />
     <Compile Include="CodeItems\ConstructorCodeItem.cs" />
+    <Compile Include="CodeItems\DelegateCodeItem.cs" />
+    <Compile Include="CodeItems\EnumCodeItem.cs" />
+    <Compile Include="CodeItems\EnumMemberCodeItem.cs" />
+    <Compile Include="CodeItems\EventCodeItem.cs" />
+    <Compile Include="CodeItems\EventFieldCodeItem.cs" />
     <Compile Include="CodeItems\FieldCodeItem.cs" />
+    <Compile Include="CodeItems\InterfaceCodeItem.cs" />
     <Compile Include="CodeItems\MethodCodeItem.cs" />
     <Compile Include="CodeItems\PropertyCodeItem.cs" />
+    <Compile Include="CodeItems\StructCodeItem.cs" />
     <Compile Include="CodeMap.cs" />
     <Compile Include="CodeMapCommand.cs" />
     <Compile Include="CodeMapControl.xaml.cs">

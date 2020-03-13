@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Editor;
+using System.Diagnostics;
 
 namespace CodeMapForVisualStudio
 {
@@ -55,19 +56,17 @@ namespace CodeMapForVisualStudio
 
         private void CodeMap_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
-            var viewer = codeMap;
-
-            if (viewer == null)
+            if (codeMap == null)
                 return;
 
             double number = Math.Abs(e.Delta / 2);
             var offset = e.Delta > 0
-                ? Math.Max(0.0, viewer.VerticalOffset - number)
-                : Math.Min(viewer.ScrollableHeight, viewer.VerticalOffset + number);
+                ? Math.Max(0.0, codeMap.VerticalOffset - number)
+                : Math.Min(codeMap.ScrollableHeight, codeMap.VerticalOffset + number);
 
-            if (offset != viewer.VerticalOffset)
+            if (offset != codeMap.VerticalOffset)
             {
-                viewer.ScrollToVerticalOffset(offset);
+                codeMap.ScrollToVerticalOffset(offset);
                 e.Handled = true;
             }
         }
@@ -129,6 +128,9 @@ namespace CodeMapForVisualStudio
 
         private async void UpdateCodeMap(Document document)
         {
+            if (document == null)
+                return;
+
             var codeItems = await MapDocumentAsync(document);
 
             if (codeItems == null)
@@ -155,17 +157,13 @@ namespace CodeMapForVisualStudio
                 if (!ExternalHelper.SupportedLanguages.Contains(syntaxRoot.Language))
                     return null;
 
-                var codeItems = new Collection<CodeItem>();
-                var classNodes = syntaxRoot.DescendantNodes().OfType<ClassDeclarationSyntax>();
-
-                foreach (var classNode in classNodes)
-                    codeItems.Add(new ClassCodeItem(classNode, document.Selection as TextSelection));
-
-                return ExternalHelper.OrderCodeItems(codeItems);
+                var declarationSyntaxNodes = syntaxRoot.DescendantNodes().OfType<MemberDeclarationSyntax>().Where(n => n.Parent is NamespaceDeclarationSyntax);
+                return ExternalHelper.ParseMemberDeclarationSyntax(declarationSyntaxNodes, document.Selection as TextSelection);
             }
-            catch
+            catch (Exception e)
             {
-                return null;
+                Debug.WriteLine(e.Message);
+                return new Collection<CodeItem>();
             }
         }
 
@@ -204,6 +202,9 @@ namespace CodeMapForVisualStudio
 
         private TreeViewItem MatchTreeViewItem(int position)
         {
+            if (codeMap.Content == null)
+                return null;
+
             var treeViewItems = ((TreeView)codeMap.Content).Items;
             return treeViewItems == null || treeViewItems.Count == 0 ? null : MatchTreeViewItemCore(position, treeViewItems);
         }
@@ -231,6 +232,9 @@ namespace CodeMapForVisualStudio
 
         private void ClearCodeMapMask()
         {
+            if (codeMap.Content == null)
+                return;
+
             var treeViewItems = ((TreeView)codeMap.Content).Items;
             if (treeViewItems == null || treeViewItems.Count == 0)
                 return;

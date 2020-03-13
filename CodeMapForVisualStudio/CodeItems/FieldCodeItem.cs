@@ -5,7 +5,7 @@ namespace CodeMapForVisualStudio
 {
     public class FieldCodeItem : CodeItem
     {
-        private string fieldType;
+        private readonly string fieldType;
 
         private FieldCodeItem()
             : this(null, null)
@@ -19,8 +19,6 @@ namespace CodeMapForVisualStudio
 
             fieldType = fieldDeclarationSyntax.Declaration.Type.ToString();
         }
-
-        public string FieldType { get => fieldType; set => fieldType = value; }
 
         protected override string GetNameFromDeclarationSyntaxCore(MemberDeclarationSyntax memberDeclarationSyntax)
         {

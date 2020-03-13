@@ -1,8 +1,13 @@
-﻿using Microsoft.VisualStudio.Imaging;
+﻿using EnvDTE;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 
@@ -16,15 +21,8 @@ namespace CodeMapForVisualStudio
         public static readonly Brush ProtectedBrush = new SolidColorBrush(Color.FromArgb(255, 184, 184, 184));
         public static readonly Brush PublicBrush = new SolidColorBrush(Color.FromArgb(255, 196, 196, 196));
 
-        public static string[] SupportedLanguages = new string[] { "C#" };
-        public static Dictionary<string, int> CodeItemsSequence = new Dictionary<string, int>
-        {
-            { typeof(FieldCodeItem).FullName, 0 },
-            { typeof(ConstructorCodeItem).FullName, 1 },
-            { typeof(PropertyCodeItem).FullName, 2 },
-            { typeof(MethodCodeItem).FullName, 3 },
-            { typeof(ClassCodeItem).FullName, 4 }
-        };
+        public static readonly string[] SupportedLanguages = new string[] { "C#" };
+        public static readonly Dictionary<string, int> CodeItemsSequence;
 
         public static string FontFamilyName = "Times New Roman";
         public static double FontSize = 15;
@@ -34,6 +32,22 @@ namespace CodeMapForVisualStudio
         public static double RightMargin = 1;
         public static double BottomMargin = 1;
 
+        internal static readonly Collection<string> CodeItemNames = new Collection<string>
+        {
+            typeof(FieldCodeItem).FullName,
+            typeof(EventFieldCodeItem).FullName,
+            typeof(DelegateCodeItem).FullName,
+            typeof(ConstructorCodeItem).FullName,
+            typeof(PropertyCodeItem).FullName,
+            typeof(EventCodeItem).FullName,
+            typeof(MethodCodeItem).FullName,
+            typeof(InterfaceCodeItem).FullName,
+            typeof(ClassCodeItem).FullName,
+            typeof(StructCodeItem).FullName,
+            typeof(EnumCodeItem).FullName,
+            typeof(EnumMemberCodeItem).FullName
+        };
+
         internal static readonly string MappingDeclarationSyntaxMethodName = "MappingDeclarationSyntax";
 
         internal static readonly string privateTag = "private";
@@ -41,6 +55,52 @@ namespace CodeMapForVisualStudio
         internal static readonly string internalTag = "internal";
         internal static readonly string protectedTag = "protected";
         internal static readonly string publicTag = "public";
+
+        static ExternalHelper()
+        {
+            CodeItemsSequence = new Dictionary<string, int>();
+            for (var i = 0; i < CodeItemNames.Count; i++)
+                CodeItemsSequence[CodeItemNames[i]] = i;
+        }
+
+        public static Collection<CodeItem> ParseMemberDeclarationSyntax(IEnumerable<MemberDeclarationSyntax> declarationSyntaxMembers, TextSelection selection)
+        {
+            if (declarationSyntaxMembers == null || declarationSyntaxMembers.Count() == 0)
+                return new Collection<CodeItem>();
+
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var codeItemType = executingAssembly.GetType(typeof(CodeItem).FullName, true, true);
+            var types = executingAssembly.GetTypes().Where(t => t.IsSubclassOf(codeItemType));
+            var mappedTypes = new Dictionary<string, Type>();
+            foreach (var type in types)
+            {
+                var constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, Type.EmptyTypes, null);
+                var instance = constructor.Invoke(new object[0]);
+                var declarationSyntax = type.GetMethod(MappingDeclarationSyntaxMethodName, BindingFlags.Instance | BindingFlags.NonPublic).Invoke(instance, null).ToString();
+                mappedTypes[declarationSyntax] = type;
+            }
+
+            var tempMemberCodeItems = new Dictionary<string, Collection<CodeItem>>();
+            foreach (var memberDeclarationSyntax in declarationSyntaxMembers)
+            {
+                var typeName = memberDeclarationSyntax.GetType().FullName;
+                if (mappedTypes.ContainsKey(typeName))
+                {
+                    var mappedCodeItemType = mappedTypes[typeName];
+                    if (!tempMemberCodeItems.ContainsKey(mappedCodeItemType.FullName))
+                        tempMemberCodeItems[mappedCodeItemType.FullName] = new Collection<CodeItem>();
+                    tempMemberCodeItems[mappedCodeItemType.FullName].Add((CodeItem)mappedTypes[typeName].GetConstructors()[0].Invoke(new object[] { memberDeclarationSyntax, selection }));
+                }
+            }
+
+            var memberCodeItems = new Collection<CodeItem>();
+            foreach (var items in tempMemberCodeItems.OrderBy(a => CodeItemsSequence[a.Key]))
+                foreach (var item in OrderCodeItems(items.Value))
+                    memberCodeItems.Add(item);
+
+            tempMemberCodeItems.Clear();
+            return memberCodeItems;
+        }
 
         internal static Collection<CodeItem> OrderCodeItems(Collection<CodeItem> codeItems)
         {
