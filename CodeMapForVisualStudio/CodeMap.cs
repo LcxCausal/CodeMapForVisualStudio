@@ -98,11 +98,11 @@ namespace CodeMapForVisualStudio
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
+            UpdateCodeMap(GotFocus.Document);
+
             var viewHost = GetCurrentViewHost();
             if (viewHost != null)
                 viewHost.TextView.Caret.PositionChanged += Caret_PositionChanged;
-
-            UpdateCodeMap(GotFocus.Document);
         }
 
         private void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e)
@@ -112,8 +112,12 @@ namespace CodeMapForVisualStudio
 
             ClearCodeMapMask();
 
-            if (matchedTreeViewItem != null)
-                matchedTreeViewItem.Background = ExternalHelper.MaskBrush;
+            if (matchedTreeViewItem.TreeViewItem != null)
+            {
+                matchedTreeViewItem.TreeViewItem.Background = ExternalHelper.MaskBrush;
+                if (matchedTreeViewItem.VerticalOffset != 0)
+                    codeMap.ScrollToVerticalOffset(matchedTreeViewItem.VerticalOffset);
+            }
         }
 
         private void DocumentEvents_DocumentOpened(Document document)
@@ -200,19 +204,38 @@ namespace CodeMapForVisualStudio
             }
         }
 
-        private TreeViewItem MatchTreeViewItem(int position)
+        private (TreeViewItem TreeViewItem, double VerticalOffset) MatchTreeViewItem(int position)
         {
             if (codeMap.Content == null)
-                return null;
+                return (null, 0);
 
             var treeViewItems = ((TreeView)codeMap.Content).Items;
-            return treeViewItems == null || treeViewItems.Count == 0 ? null : MatchTreeViewItemCore(position, treeViewItems);
+            var returnTreeViewItemIndex = 0;
+            var returnTreeViewItem = treeViewItems == null || treeViewItems.Count == 0 ? null : MatchTreeViewItemCore(position, treeViewItems, ref returnTreeViewItemIndex);
+
+            return (returnTreeViewItem, returnTreeViewItemIndex * codeMap.ScrollableHeight / GetTreeViewItemsCount(treeViewItems));
         }
 
-        private TreeViewItem MatchTreeViewItemCore(int position, ItemCollection treeViewItems)
+        private int GetTreeViewItemsCount(ItemCollection treeViewItems)
+        {
+            var count = 0;
+
+            foreach (TreeViewItem treeViewItem in treeViewItems)
+            {
+                count++;
+                if (treeViewItem.HasItems)
+                    count += GetTreeViewItemsCount(treeViewItem.Items);
+            }
+
+            return count;
+        }
+
+        private TreeViewItem MatchTreeViewItemCore(int position, ItemCollection treeViewItems, ref int index)
         {
             foreach (TreeViewItem treeViewItem in treeViewItems)
             {
+                index++;
+
                 if (!treeViewItem.HasItems)
                 {
                     var sourceSpan = (Microsoft.CodeAnalysis.Text.TextSpan)treeViewItem.Tag;
@@ -221,7 +244,7 @@ namespace CodeMapForVisualStudio
                 }
                 else
                 {
-                    var returnTreeViewItem = MatchTreeViewItemCore(position, treeViewItem.Items);
+                    var returnTreeViewItem = MatchTreeViewItemCore(position, treeViewItem.Items, ref index);
                     if (returnTreeViewItem != null)
                         return returnTreeViewItem;
                 }
