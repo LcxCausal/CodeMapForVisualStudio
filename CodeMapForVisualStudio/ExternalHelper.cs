@@ -3,6 +3,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -100,6 +103,23 @@ namespace CodeMapForVisualStudio
 
             tempMemberCodeItems.Clear();
             return memberCodeItems;
+        }
+
+        /// <summary>
+        /// Get file path from IWpfTextView.
+        /// </summary>
+        /// <param name="textView">IWpfTextView object.</param>
+        /// <returns>file path.</returns>
+        internal static string GetPath(this IWpfTextView textView)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            textView.TextBuffer.Properties.TryGetProperty(typeof(IVsTextBuffer), out IVsTextBuffer bufferAdapter);
+
+            if (!(bufferAdapter is IPersistFileFormat persistFileFormat))
+                return null;
+
+            persistFileFormat.GetCurFile(out var filePath, out _);
+            return filePath;
         }
 
         internal static Collection<CodeItem> OrderCodeItems(Collection<CodeItem> codeItems)

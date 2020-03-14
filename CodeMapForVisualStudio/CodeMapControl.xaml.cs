@@ -1,9 +1,7 @@
-﻿namespace CodeMapForVisualStudio
-{
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows;
-    using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
+namespace CodeMapForVisualStudio
+{
     /// <summary>
     /// Interaction logic for CodeMapControl.
     /// </summary>

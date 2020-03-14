@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using EnvDTE;
-using System.Threading.Tasks;
 using System.IO;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,6 +14,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Editor;
 using System.Diagnostics;
+using System.Threading;
 
 namespace CodeMapForVisualStudio
 {
@@ -34,6 +34,7 @@ namespace CodeMapForVisualStudio
     public class CodeMap : ToolWindowPane
     {
         private readonly ScrollViewer codeMap;
+        private readonly Semaphore semaphore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeMap"/> class.
@@ -52,6 +53,8 @@ namespace CodeMapForVisualStudio
             codeMap.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             codeMap.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
             codeMap.PreviewMouseWheel += CodeMap_PreviewMouseWheel;
+
+            semaphore = new Semaphore(1, 1);
         }
 
         private void CodeMap_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
@@ -99,10 +102,6 @@ namespace CodeMapForVisualStudio
             ThreadHelper.ThrowIfNotOnUIThread();
 
             UpdateCodeMap(GotFocus.Document);
-
-            var viewHost = GetCurrentViewHost();
-            if (viewHost != null)
-                viewHost.TextView.Caret.PositionChanged += Caret_PositionChanged;
         }
 
         private void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e)
@@ -122,41 +121,58 @@ namespace CodeMapForVisualStudio
 
         private void DocumentEvents_DocumentOpened(Document document)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             UpdateCodeMap(document);
         }
 
         private void DocumentEvents_DocumentSaved(Document document)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             UpdateCodeMap(document);
         }
 
-        private async void UpdateCodeMap(Document document)
+        private void UpdateCodeMap(Document document)
         {
-            if (document == null)
-                return;
+            semaphore.WaitOne();
 
-            var codeItems = await MapDocumentAsync(document);
-
-            if (codeItems == null)
-                return;
-
-            var codeTree = new TreeView() { Background = Brushes.Transparent };
-            codeMap.Content = codeTree;
-
-            foreach (var codeItem in codeItems)
-                codeTree.Items.Add(codeItem.ToUIControl());
-        }
-
-        private static async Task<Collection<CodeItem>> MapDocumentAsync(Document document)
-        {
             try
             {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                ThreadHelper.ThrowIfNotOnUIThread();
 
+                if (document == null)
+                    return;
+
+                var codeItems = MapDocument(document);
+
+                if (codeItems == null)
+                    return;
+
+                var codeTree = new TreeView() { Background = Brushes.Transparent };
+                foreach (var codeItem in codeItems)
+                    codeTree.Items.Add(codeItem.ToUIControl());
+
+                codeMap.Content = codeTree;
+
+                var viewHost = GetCurrentViewHost();
+                if (viewHost != null)
+                    viewHost.TextView.Caret.PositionChanged += Caret_PositionChanged;
+            }
+            finally
+            {
+                semaphore.Release();
+            }
+        }
+
+        private static Collection<CodeItem> MapDocument(Document document)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            try
+            {
                 var filePath = GetFullName(document);
                 var currentText = File.ReadAllText(filePath, Encoding.UTF8);
                 var csTree = CSharpSyntaxTree.ParseText(currentText);
-                var syntaxRoot = await csTree.GetRootAsync();
+                var syntaxRoot = csTree.GetRootAsync().Result;
 
                 if (!ExternalHelper.SupportedLanguages.Contains(syntaxRoot.Language))
                     return null;
@@ -192,7 +208,7 @@ namespace CodeMapForVisualStudio
         private IWpfTextViewHost GetCurrentViewHost()
         {
             var textManager = (IVsTextManager)GetService(typeof(SVsTextManager));
-            textManager.GetActiveView(1, null, out var textView);
+            textManager.GetActiveView(0, null, out var textView);
 
             if (!(textView is IVsUserData userData))
                 return null;
