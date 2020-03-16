@@ -19,7 +19,9 @@ namespace CodeMapForVisualStudio
             if (propertyDeclarationSyntax == null)
                 return;
 
-            accessors = string.Join("; ", propertyDeclarationSyntax.AccessorList.Accessors.Select(a => a.Keyword.ValueText));
+            accessors = propertyDeclarationSyntax.AccessorList != null
+                ? string.Join("; ", propertyDeclarationSyntax.AccessorList.Accessors.Select(a => a.Keyword.ValueText))
+                : "get";
             propertyType = propertyDeclarationSyntax.Type.ToString();
         }
 
