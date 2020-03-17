@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 
 namespace CodeMapForVisualStudio
@@ -13,7 +14,8 @@ namespace CodeMapForVisualStudio
         /// <summary>
         /// Command ID.
         /// </summary>
-        public const int CommandId = 0x0100;
+        public const int OpenCommandId = 0x0100;
+        public const int SettingsCommandId = 0x0101;
 
         /// <summary>
         /// Command menu group (command set GUID).
@@ -36,9 +38,13 @@ namespace CodeMapForVisualStudio
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
-            var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new MenuCommand(Execute, menuCommandID);
-            commandService.AddCommand(menuItem);
+            var openCommandId = new CommandID(CommandSet, OpenCommandId);
+            var openMenuItem = new MenuCommand(Open, openCommandId);
+            commandService.AddCommand(openMenuItem);
+
+            var settingsCommandID = new CommandID(CommandSet, SettingsCommandId);
+            var settingsMenuItem = new MenuCommand(ChangeSettings, settingsCommandID);
+            commandService.AddCommand(settingsMenuItem);
         }
 
         /// <summary>
@@ -80,7 +86,7 @@ namespace CodeMapForVisualStudio
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
-        private void Execute(object sender, EventArgs e)
+        private void Open(object sender, EventArgs e)
         {
             package.JoinableTaskFactory.RunAsync(async delegate
             {
@@ -90,6 +96,27 @@ namespace CodeMapForVisualStudio
                     throw new NotSupportedException("Cannot create tool window");
                 }
             });
+        }
+
+        /// <summary>
+        /// Change Settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChangeSettings(object sender, EventArgs e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            string message = "Temporary Unrealized!\n We'll do it in the next step.";
+            string title = "Messages";
+
+            // Show a message box to prove we were here
+            VsShellUtilities.ShowMessageBox(
+                this.package,
+                message,
+                title,
+                OLEMSGICON.OLEMSGICON_INFO,
+                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
     }
 }
