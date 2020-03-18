@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.Drawing;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
@@ -27,6 +28,8 @@ namespace CodeMapForVisualStudio
         /// </summary>
         private readonly AsyncPackage package;
 
+        private CodeMap codeMap;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeMapCommand"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
@@ -35,6 +38,7 @@ namespace CodeMapForVisualStudio
         /// <param name="commandService">Command service to add command to, not null.</param>
         private CodeMapCommand(AsyncPackage package, OleMenuCommandService commandService)
         {
+            codeMap = null;
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
@@ -91,10 +95,11 @@ namespace CodeMapForVisualStudio
             package.JoinableTaskFactory.RunAsync(async delegate
             {
                 var window = await package.ShowToolWindowAsync(typeof(CodeMap), 0, true, package.DisposalToken);
+
                 if ((null == window) || (null == window.Frame))
-                {
                     throw new NotSupportedException("Cannot create tool window");
-                }
+                else
+                    codeMap = window as CodeMap;
             });
         }
 
@@ -105,18 +110,12 @@ namespace CodeMapForVisualStudio
         /// <param name="e"></param>
         private void ChangeSettings(object sender, EventArgs e)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            string message = "Temporary Unrealized!\n We'll do it in the next step.";
-            string title = "Messages";
+            using (var settingsForm = new SettingsForm())
+                settingsForm.ShowDialog();
 
-            // Show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.package,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (codeMap != null)
+                codeMap.ForceUpdateCodeMap();
         }
     }
 }
