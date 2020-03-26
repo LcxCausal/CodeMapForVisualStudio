@@ -30,9 +30,9 @@
         {
             this.settingsTabC = new System.Windows.Forms.TabControl();
             this.fontStyleSettingsTabP = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.fontFamilyNameLab = new System.Windows.Forms.Label();
             this.fontFamilyNameCmb = new System.Windows.Forms.ComboBox();
+            this.fontFamilyNameLab = new System.Windows.Forms.Label();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.settingsTabC.SuspendLayout();
             this.fontStyleSettingsTabP.SuspendLayout();
             this.SuspendLayout();
@@ -68,15 +68,14 @@
             this.fontStyleSettingsTabP.Text = "Font Styles";
             this.fontStyleSettingsTabP.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // fontFamilyNameCmb
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 34);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(771, 507);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.fontFamilyNameCmb.FormattingEnabled = true;
+            this.fontFamilyNameCmb.Location = new System.Drawing.Point(251, 39);
+            this.fontFamilyNameCmb.Name = "fontFamilyNameCmb";
+            this.fontFamilyNameCmb.Size = new System.Drawing.Size(474, 32);
+            this.fontFamilyNameCmb.TabIndex = 1;
+            this.fontFamilyNameCmb.TextChanged += new System.EventHandler(this.fontFamilyNameCmb_TextChanged);
             // 
             // fontFamilyNameLab
             // 
@@ -87,14 +86,15 @@
             this.fontFamilyNameLab.TabIndex = 0;
             this.fontFamilyNameLab.Text = "Font FamilyName:";
             // 
-            // fontFamilyNameCmb
+            // tabPage2
             // 
-            this.fontFamilyNameCmb.FormattingEnabled = true;
-            this.fontFamilyNameCmb.Location = new System.Drawing.Point(251, 39);
-            this.fontFamilyNameCmb.Name = "fontFamilyNameCmb";
-            this.fontFamilyNameCmb.Size = new System.Drawing.Size(474, 32);
-            this.fontFamilyNameCmb.TabIndex = 1;
-            this.fontFamilyNameCmb.SelectedIndexChanged += new System.EventHandler(this.fontFamilyNameCmb_SelectedIndexChanged);
+            this.tabPage2.Location = new System.Drawing.Point(4, 54);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(771, 487);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 

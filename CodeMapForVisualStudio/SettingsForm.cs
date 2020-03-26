@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CodeMapForVisualStudio
@@ -25,12 +20,23 @@ namespace CodeMapForVisualStudio
             // Load font styles
             foreach (var fontFamily in FontFamily.Families)
                 fontFamilyNameCmb.Items.Add(fontFamily.Name);
+
             fontFamilyNameCmb.SelectedItem = ExternalHelper.FontFamilyName;
+            fontFamilyNameCmb.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            fontFamilyNameCmb.AutoCompleteSource = AutoCompleteSource.CustomSource;
+
+            var autoCompleteStringCollection = new AutoCompleteStringCollection();
+            autoCompleteStringCollection.AddRange(FontFamily.Families.Select(f => f.Name).ToArray());
+            fontFamilyNameCmb.AutoCompleteCustomSource = autoCompleteStringCollection;
         }
 
-        private void fontFamilyNameCmb_SelectedIndexChanged(object sender, EventArgs e)
+        private void fontFamilyNameCmb_TextChanged(object sender, EventArgs e)
         {
-            ExternalHelper.FontFamilyName = fontFamilyNameCmb.SelectedText;
+            if (!FontFamily.Families.Select(f => f.Name).Contains(fontFamilyNameCmb.Text))
+                return;
+
+            ExternalHelper.FontFamilyName = fontFamilyNameCmb.Text;
         }
+
     }
 }

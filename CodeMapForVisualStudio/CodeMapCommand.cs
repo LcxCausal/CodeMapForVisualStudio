@@ -114,8 +114,24 @@ namespace CodeMapForVisualStudio
                 settingsForm.ShowDialog();
 
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (codeMap != null)
-                codeMap.ForceUpdateCodeMap();
+
+            if (codeMap == null && package != null)
+            {
+                package.JoinableTaskFactory.RunAsync(async delegate
+                {
+                    var window = await package.ShowToolWindowAsync(typeof(CodeMap), 0, true, package.DisposalToken);
+
+                    if ((null == window) || (null == window.Frame))
+                        throw new NotSupportedException("Cannot create tool window");
+                    else
+                    {
+                        codeMap = window as CodeMap;
+                        codeMap?.ForceUpdateCodeMap();
+                    }
+                });
+            }
+            else
+                codeMap?.ForceUpdateCodeMap();
         }
     }
 }
