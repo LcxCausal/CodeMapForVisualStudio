@@ -51,6 +51,8 @@ namespace CodeMapForVisualStudio
             commandService.AddCommand(settingsMenuItem);
         }
 
+        internal CodeMap CodeMap => codeMap;
+
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
@@ -92,15 +94,7 @@ namespace CodeMapForVisualStudio
         /// <param name="e">The event args.</param>
         private void Open(object sender, EventArgs e)
         {
-            package.JoinableTaskFactory.RunAsync(async delegate
-            {
-                var window = await package.ShowToolWindowAsync(typeof(CodeMap), 0, true, package.DisposalToken);
-
-                if ((null == window) || (null == window.Frame))
-                    throw new NotSupportedException("Cannot create tool window");
-                else
-                    codeMap = window as CodeMap;
-            });
+            LoadCodeMapWindow();
         }
 
         /// <summary>
@@ -110,28 +104,24 @@ namespace CodeMapForVisualStudio
         /// <param name="e"></param>
         private void ChangeSettings(object sender, EventArgs e)
         {
-            using (var settingsForm = new SettingsForm())
-                settingsForm.ShowDialog();
-
-            ThreadHelper.ThrowIfNotOnUIThread();
-
             if (codeMap == null && package != null)
-            {
-                package.JoinableTaskFactory.RunAsync(async delegate
-                {
-                    var window = await package.ShowToolWindowAsync(typeof(CodeMap), 0, true, package.DisposalToken);
+                LoadCodeMapWindow();
 
-                    if ((null == window) || (null == window.Frame))
-                        throw new NotSupportedException("Cannot create tool window");
-                    else
-                    {
-                        codeMap = window as CodeMap;
-                        codeMap?.ForceUpdateCodeMap();
-                    }
-                });
-            }
-            else
-                codeMap?.ForceUpdateCodeMap();
+            using (var settingsForm = new SettingsForm(codeMap))
+                settingsForm.ShowDialog();
+        }
+
+        private void LoadCodeMapWindow()
+        {
+            package.JoinableTaskFactory.RunAsync(async delegate
+            {
+                var window = await package.ShowToolWindowAsync(typeof(CodeMap), 0, true, package.DisposalToken);
+
+                if ((null == window) || (null == window.Frame))
+                    throw new NotSupportedException("Cannot create tool window");
+                else
+                    codeMap = window as CodeMap;
+            });
         }
     }
 }
