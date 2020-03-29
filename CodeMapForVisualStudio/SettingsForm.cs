@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace CodeMapForVisualStudio
 {
@@ -23,7 +24,7 @@ namespace CodeMapForVisualStudio
 
             this.codeMap = codeMap;
 
-            fontFamilies = FontFamily.Families.Select(f => f.Name).ToArray();
+            fontFamilies = System.Drawing.FontFamily.Families.Select(f => f.Name).ToArray();
             fontWeights = typeof(FontWeights).GetProperties().Select(p => p.Name).ToArray();
             BackColor = System.Drawing.SystemColors.Control;
 
@@ -53,6 +54,7 @@ namespace CodeMapForVisualStudio
             LoadFontSize();
             LoadFontWeight();
             LoadFontMargins();
+            LoadSelectedMaskBrush();
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace CodeMapForVisualStudio
         }
 
         /// <summary>
-        /// 加载字体四个方向的 Margins
+        /// 加载字体四个方向的 Margins。
         /// </summary>
         private void LoadFontMargins()
         {
@@ -88,6 +90,21 @@ namespace CodeMapForVisualStudio
             rightMarginTxtB.Text = ExternalHelper.RightMargin.ToString();
             topMarginTxtB.Text = ExternalHelper.TopMargin.ToString();
             bottomMarginTxtB.Text = ExternalHelper.BottomMargin.ToString();
+        }
+
+        /// <summary>
+        /// 加载被选项目的高亮背景色。
+        /// </summary>
+        private void LoadSelectedMaskBrush()
+        {
+            if (ExternalHelper.MaskBrush is SolidColorBrush maskBrush)
+            {
+                selectedAlphaTxtB.Text = maskBrush.Color.A.ToString();
+                selectedRedTxtB.Text = maskBrush.Color.R.ToString();
+                selectedGreenTxtB.Text = maskBrush.Color.G.ToString();
+                selectedBlueTxtB.Text = maskBrush.Color.B.ToString();
+                selectedColorShownBtn.BackColor = System.Drawing.Color.FromArgb(255, maskBrush.Color.R, maskBrush.Color.G, maskBrush.Color.B);
+            }
         }
 
         /// <summary>
@@ -171,7 +188,7 @@ namespace CodeMapForVisualStudio
         }
 
         /// <summary>
-        /// 字体的上边缘距离改变事件
+        /// 字体的上边缘距离改变事件。
         /// </summary>
         /// <param name="sender">topMarginTxtB 对象</param>
         /// <param name="e">文本改变的事件参数</param>
@@ -187,7 +204,7 @@ namespace CodeMapForVisualStudio
         }
 
         /// <summary>
-        /// 字体的下边缘距离改变事件
+        /// 字体的下边缘距离改变事件。
         /// </summary>
         /// <param name="sender">bottomMarginTxtB 对象</param>
         /// <param name="e">文本改变的事件参数</param>
@@ -203,7 +220,7 @@ namespace CodeMapForVisualStudio
         }
 
         /// <summary>
-        /// 字体样式恢复默认样式
+        /// 字体样式恢复默认样式。
         /// </summary>
         /// <param name="sender">resetBtn 对象</param>
         /// <param name="e">按钮控件点击事件参数</param>
@@ -214,6 +231,94 @@ namespace CodeMapForVisualStudio
             ExternalHelper.ResetFontStyles();
             LoadCodeMapConfigurations();
             codeMap?.ForceUpdateCodeMap();
+        }
+
+        /// <summary>
+        /// SelectedColorShownBtn 控件点击事件。
+        /// </summary>
+        /// <param name="sender">selectedColorShownBtn 对象</param>
+        /// <param name="e">按钮控件点击事件参数</param>
+        private void selectedColorShownBtn_Click(object sender, EventArgs e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            using (var colorDialog = new ColorDialog())
+            {
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ExternalHelper.MaskBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B));
+                    LoadSelectedMaskBrush();
+                    codeMap?.ForceUpdateCodeMap();
+                }
+            }
+        }
+
+        /// <summary>
+        /// selectedAlphaTxtB 文本改变事件。
+        /// </summary>
+        /// <param name="sender">selectedAlphaTxtB 对象</param>
+        /// <param name="e">文本改变事件参数</param>
+        private void selectedAlphaTxtB_TextChanged(object sender, EventArgs e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (byte.TryParse(selectedAlphaTxtB.Text, out var alpha) && ExternalHelper.MaskBrush is SolidColorBrush maskBrush && alpha != maskBrush.Color.A)
+            {
+                ExternalHelper.MaskBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(alpha, maskBrush.Color.R, maskBrush.Color.G, maskBrush.Color.B));
+                LoadSelectedMaskBrush();
+                codeMap?.ForceUpdateCodeMap();
+            }
+        }
+
+        /// <summary>
+        /// selectedRedTxtB 文本改变事件。
+        /// </summary>
+        /// <param name="sender">selectedRedTxtB 对象</param>
+        /// <param name="e">文本改变事件参数</param>
+        private void selectedRedTxtB_TextChanged(object sender, EventArgs e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (byte.TryParse(selectedRedTxtB.Text, out var red) && ExternalHelper.MaskBrush is SolidColorBrush maskBrush && red != maskBrush.Color.R)
+            {
+                ExternalHelper.MaskBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(maskBrush.Color.A, red, maskBrush.Color.G, maskBrush.Color.B));
+                LoadSelectedMaskBrush();
+                codeMap?.ForceUpdateCodeMap();
+            }
+        }
+
+        /// <summary>
+        /// selectedGreenTxtB 文本改变事件。
+        /// </summary>
+        /// <param name="sender">selectedGreenTxtB 对象</param>
+        /// <param name="e">文本改变事件参数</param>
+        private void selectedGreenTxtB_TextChanged(object sender, EventArgs e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (byte.TryParse(selectedGreenTxtB.Text, out var green) && ExternalHelper.MaskBrush is SolidColorBrush maskBrush && green != maskBrush.Color.G)
+            {
+                ExternalHelper.MaskBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(maskBrush.Color.A, maskBrush.Color.R, green, maskBrush.Color.B));
+                LoadSelectedMaskBrush();
+                codeMap?.ForceUpdateCodeMap();
+            }
+        }
+
+        /// <summary>
+        /// selectedBlueTxtB 文本改变事件。
+        /// </summary>
+        /// <param name="sender">selectedBlueTxtB 对象</param>
+        /// <param name="e">文本改变事件参数</param>
+        private void selectedBlueTxtB_TextChanged(object sender, EventArgs e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (byte.TryParse(selectedBlueTxtB.Text, out var blue) && ExternalHelper.MaskBrush is SolidColorBrush maskBrush && blue != maskBrush.Color.B)
+            {
+                ExternalHelper.MaskBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(maskBrush.Color.A, maskBrush.Color.R, maskBrush.Color.G, blue));
+                LoadSelectedMaskBrush();
+                codeMap?.ForceUpdateCodeMap();
+            }
         }
     }
 }
