@@ -35,6 +35,7 @@ namespace CodeMapForVisualStudio
     {
         private readonly ScrollViewer codeMap;
         private readonly Semaphore semaphore;
+        private Document currentDocument;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeMap"/> class.
@@ -54,6 +55,7 @@ namespace CodeMapForVisualStudio
             codeMap.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
             codeMap.PreviewMouseWheel += CodeMap_PreviewMouseWheel;
 
+            currentDocument = null;
             semaphore = new Semaphore(1, 1);
         }
 
@@ -135,6 +137,7 @@ namespace CodeMapForVisualStudio
         {
             semaphore.WaitOne();
 
+            // TODO: Known issue: 除了window activated，codeMap刷新会失败。
             try
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
@@ -142,6 +145,7 @@ namespace CodeMapForVisualStudio
                 if (document == null)
                     return;
 
+                currentDocument = document;
                 var codeItems = MapDocument(document);
 
                 if (codeItems == null)
@@ -161,6 +165,15 @@ namespace CodeMapForVisualStudio
             {
                 semaphore.Release();
             }
+        }
+
+        internal void ForceUpdateCodeMap()
+        {
+            if (currentDocument == null)
+                return;
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+            UpdateCodeMap(currentDocument);
         }
 
         private static Collection<CodeItem> MapDocument(Document document)

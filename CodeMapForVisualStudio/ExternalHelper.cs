@@ -18,22 +18,36 @@ namespace CodeMapForVisualStudio
 {
     public static class ExternalHelper
     {
-        public static readonly Brush MaskBrush = new SolidColorBrush(Color.FromArgb(100, 0, 168, 255));
-        public static readonly Brush PrivateBrush = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
-        public static readonly Brush InternalBrush = new SolidColorBrush(Color.FromArgb(255, 172, 172, 172));
-        public static readonly Brush ProtectedBrush = new SolidColorBrush(Color.FromArgb(255, 184, 184, 184));
-        public static readonly Brush PublicBrush = new SolidColorBrush(Color.FromArgb(255, 196, 196, 196));
+        private static readonly Brush defaultMaskBrush = new SolidColorBrush(Color.FromArgb(100, 0, 168, 255));
+        private static readonly Brush defaultPrivateBrush = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
+        private static readonly Brush defaultInternalBrush = new SolidColorBrush(Color.FromArgb(255, 172, 172, 172));
+        private static readonly Brush defaultProtectedBrush = new SolidColorBrush(Color.FromArgb(255, 184, 184, 184));
+        private static readonly Brush defaultPublicBrush = new SolidColorBrush(Color.FromArgb(255, 196, 196, 196));
+
+        private static readonly string defaultFontFamilyName = "Times New Roman";
+        private static readonly double defaultFontSize = 15;
+        private static FontWeight defaultFontWeight = FontWeights.Normal;
+        private static readonly double defaultLeftMargin = 4;
+        private static readonly double defaultTopMargin = 1;
+        private static readonly double defaultRightMargin = 1;
+        private static readonly double defaultBottomMargin = 1;
+
+        public static Brush MaskBrush = defaultMaskBrush;
+        public static Brush PrivateBrush = defaultPrivateBrush;
+        public static Brush InternalBrush = defaultInternalBrush;
+        public static Brush ProtectedBrush = defaultProtectedBrush;
+        public static Brush PublicBrush = defaultPublicBrush;
+
+        public static string FontFamilyName = defaultFontFamilyName;
+        public static double FontSize = defaultFontSize;
+        public static FontWeight FontWeight = defaultFontWeight;
+        public static double LeftMargin = defaultLeftMargin;
+        public static double TopMargin = defaultTopMargin;
+        public static double RightMargin = defaultRightMargin;
+        public static double BottomMargin = defaultBottomMargin;
 
         public static readonly string[] SupportedLanguages = new string[] { "C#" };
-        public static readonly Dictionary<string, int> CodeItemsSequence;
-
-        public static string FontFamilyName = "Times New Roman";
-        public static double FontSize = 15;
-        public static FontWeight FontWeight = FontWeights.Normal;
-        public static double LeftMargin = 4;
-        public static double TopMargin = 1;
-        public static double RightMargin = 1;
-        public static double BottomMargin = 1;
+        internal static readonly Dictionary<string, int> CodeItemsSequence;
 
         internal static readonly Collection<string> CodeItemNames = new Collection<string>
         {
@@ -64,6 +78,17 @@ namespace CodeMapForVisualStudio
             CodeItemsSequence = new Dictionary<string, int>();
             for (var i = 0; i < CodeItemNames.Count; i++)
                 CodeItemsSequence[CodeItemNames[i]] = i;
+        }
+
+        public static void ResetFontStyles()
+        {
+            FontFamilyName = defaultFontFamilyName;
+            FontSize = defaultFontSize;
+            FontWeight = defaultFontWeight;
+            LeftMargin = defaultLeftMargin;
+            TopMargin = defaultTopMargin;
+            RightMargin = defaultRightMargin;
+            BottomMargin = defaultBottomMargin;
         }
 
         public static Collection<CodeItem> ParseMemberDeclarationSyntax(IEnumerable<MemberDeclarationSyntax> declarationSyntaxMembers, TextSelection selection)
