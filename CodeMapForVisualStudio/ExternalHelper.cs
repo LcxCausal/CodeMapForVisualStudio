@@ -91,6 +91,15 @@ namespace CodeMapForVisualStudio
             BottomMargin = defaultBottomMargin;
         }
 
+        public static void ResetColors()
+        {
+            MaskBrush = defaultMaskBrush;
+            PrivateBrush = defaultPrivateBrush;
+            InternalBrush = defaultInternalBrush;
+            ProtectedBrush = defaultProtectedBrush;
+            PublicBrush = defaultPublicBrush;
+        }
+
         public static Collection<CodeItem> ParseMemberDeclarationSyntax(IEnumerable<MemberDeclarationSyntax> declarationSyntaxMembers, TextSelection selection)
         {
             if (declarationSyntaxMembers == null || declarationSyntaxMembers.Count() == 0)
