@@ -30,7 +30,7 @@
         {
             this.settingsTabC = new System.Windows.Forms.TabControl();
             this.fontStyleSettingsTabP = new System.Windows.Forms.TabPage();
-            this.resetBtn = new System.Windows.Forms.Button();
+            this.resetFontStylesBtn = new System.Windows.Forms.Button();
             this.bottomMarginTxtB = new System.Windows.Forms.TextBox();
             this.rightMarginTxtB = new System.Windows.Forms.TextBox();
             this.topMarginTxtB = new System.Windows.Forms.TextBox();
@@ -47,16 +47,57 @@
             this.fontFamilyNameCmb = new System.Windows.Forms.ComboBox();
             this.fontFamilyNameLab = new System.Windows.Forms.Label();
             this.colorsTabP = new System.Windows.Forms.TabPage();
-            this.selectedColorLab = new System.Windows.Forms.Label();
-            this.selectedAlphaTxtB = new System.Windows.Forms.TextBox();
-            this.selectedAlphaLab = new System.Windows.Forms.Label();
-            this.selectedRedLab = new System.Windows.Forms.Label();
-            this.selectedRedTxtB = new System.Windows.Forms.TextBox();
-            this.selectedGreenTxtB = new System.Windows.Forms.TextBox();
-            this.selectedGreenLab = new System.Windows.Forms.Label();
-            this.selectedBlueTxtB = new System.Windows.Forms.TextBox();
-            this.selectedBlueLab = new System.Windows.Forms.Label();
-            this.selectedColorShownBtn = new System.Windows.Forms.Button();
+            this.publicTextColorShownBtn = new System.Windows.Forms.Button();
+            this.publicTextBlueTxtB = new System.Windows.Forms.TextBox();
+            this.publicTextBlueLab = new System.Windows.Forms.Label();
+            this.publicTextGreenTxtB = new System.Windows.Forms.TextBox();
+            this.publicTextGreenLab = new System.Windows.Forms.Label();
+            this.publicTextRedTxtB = new System.Windows.Forms.TextBox();
+            this.publicTextRedLab = new System.Windows.Forms.Label();
+            this.publicTextAlphaLab = new System.Windows.Forms.Label();
+            this.publicTextAlphaTxtB = new System.Windows.Forms.TextBox();
+            this.publicTextColorLab = new System.Windows.Forms.Label();
+            this.protectedTextColorShownBtn = new System.Windows.Forms.Button();
+            this.protectedTextBlueTxtB = new System.Windows.Forms.TextBox();
+            this.protectedTextBlueLab = new System.Windows.Forms.Label();
+            this.protectedTextGreenTxtB = new System.Windows.Forms.TextBox();
+            this.protectedTextGreenLab = new System.Windows.Forms.Label();
+            this.protectedTextRedTxtB = new System.Windows.Forms.TextBox();
+            this.protectedTextRedLab = new System.Windows.Forms.Label();
+            this.protectedTextAlphaLab = new System.Windows.Forms.Label();
+            this.protectedTextAlphaTxtB = new System.Windows.Forms.TextBox();
+            this.protectedTextColorLab = new System.Windows.Forms.Label();
+            this.internalTextColorShownBtn = new System.Windows.Forms.Button();
+            this.internalTextBlueTxtB = new System.Windows.Forms.TextBox();
+            this.internalTextBlueLab = new System.Windows.Forms.Label();
+            this.internalTextGreenTxtB = new System.Windows.Forms.TextBox();
+            this.internalTextGreenLab = new System.Windows.Forms.Label();
+            this.internalTextRedTxtB = new System.Windows.Forms.TextBox();
+            this.internalTextRedLab = new System.Windows.Forms.Label();
+            this.internalTextAlphaLab = new System.Windows.Forms.Label();
+            this.internalTextAlphaTxtB = new System.Windows.Forms.TextBox();
+            this.internalTextColorLab = new System.Windows.Forms.Label();
+            this.privateTextColorShownBtn = new System.Windows.Forms.Button();
+            this.privateTextBlueTxtB = new System.Windows.Forms.TextBox();
+            this.privateTextBlueLab = new System.Windows.Forms.Label();
+            this.privateTextGreenTxtB = new System.Windows.Forms.TextBox();
+            this.privateTextGreenLab = new System.Windows.Forms.Label();
+            this.privateTextRedTxtB = new System.Windows.Forms.TextBox();
+            this.privateTextRedLab = new System.Windows.Forms.Label();
+            this.privateTextAlphaLab = new System.Windows.Forms.Label();
+            this.privateTextAlphaTxtB = new System.Windows.Forms.TextBox();
+            this.privateColorLab = new System.Windows.Forms.Label();
+            this.focusedMaskColorShownBtn = new System.Windows.Forms.Button();
+            this.focusedMaskColorBlueTxtB = new System.Windows.Forms.TextBox();
+            this.focusedMaskColorBlueLab = new System.Windows.Forms.Label();
+            this.focusedMaskColorGreenTxtB = new System.Windows.Forms.TextBox();
+            this.focusedMaskColorGreenLab = new System.Windows.Forms.Label();
+            this.focusedMaskColorRedTxtB = new System.Windows.Forms.TextBox();
+            this.focusedMaskColorRedLab = new System.Windows.Forms.Label();
+            this.focusedMaskColorAlphaLab = new System.Windows.Forms.Label();
+            this.focusedMaskColorAlphaTxtB = new System.Windows.Forms.TextBox();
+            this.focusedMaskColorLab = new System.Windows.Forms.Label();
+            this.resetColorsBtn = new System.Windows.Forms.Button();
             this.settingsTabC.SuspendLayout();
             this.fontStyleSettingsTabP.SuspendLayout();
             this.colorsTabP.SuspendLayout();
@@ -83,7 +124,7 @@
             // 
             // fontStyleSettingsTabP
             // 
-            this.fontStyleSettingsTabP.Controls.Add(this.resetBtn);
+            this.fontStyleSettingsTabP.Controls.Add(this.resetFontStylesBtn);
             this.fontStyleSettingsTabP.Controls.Add(this.bottomMarginTxtB);
             this.fontStyleSettingsTabP.Controls.Add(this.rightMarginTxtB);
             this.fontStyleSettingsTabP.Controls.Add(this.topMarginTxtB);
@@ -107,18 +148,18 @@
             this.fontStyleSettingsTabP.Text = "Font Styles";
             this.fontStyleSettingsTabP.UseVisualStyleBackColor = true;
             // 
-            // resetBtn
+            // resetFontStylesBtn
             // 
-            this.resetBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.resetFontStylesBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.resetBtn.Location = new System.Drawing.Point(31, 428);
-            this.resetBtn.Name = "resetBtn";
-            this.resetBtn.Size = new System.Drawing.Size(694, 38);
-            this.resetBtn.TabIndex = 15;
-            this.resetBtn.Text = "Reset";
-            this.resetBtn.UseVisualStyleBackColor = true;
-            this.resetBtn.Click += new System.EventHandler(this.resetBtn_Click);
+            this.resetFontStylesBtn.Location = new System.Drawing.Point(31, 428);
+            this.resetFontStylesBtn.Name = "resetFontStylesBtn";
+            this.resetFontStylesBtn.Size = new System.Drawing.Size(694, 38);
+            this.resetFontStylesBtn.TabIndex = 15;
+            this.resetFontStylesBtn.Text = "Reset";
+            this.resetFontStylesBtn.UseVisualStyleBackColor = true;
+            this.resetFontStylesBtn.Click += new System.EventHandler(this.resetFontStylesBtn_Click);
             // 
             // bottomMarginTxtB
             // 
@@ -252,16 +293,57 @@
             // 
             // colorsTabP
             // 
-            this.colorsTabP.Controls.Add(this.selectedColorShownBtn);
-            this.colorsTabP.Controls.Add(this.selectedBlueTxtB);
-            this.colorsTabP.Controls.Add(this.selectedBlueLab);
-            this.colorsTabP.Controls.Add(this.selectedGreenTxtB);
-            this.colorsTabP.Controls.Add(this.selectedGreenLab);
-            this.colorsTabP.Controls.Add(this.selectedRedTxtB);
-            this.colorsTabP.Controls.Add(this.selectedRedLab);
-            this.colorsTabP.Controls.Add(this.selectedAlphaLab);
-            this.colorsTabP.Controls.Add(this.selectedAlphaTxtB);
-            this.colorsTabP.Controls.Add(this.selectedColorLab);
+            this.colorsTabP.Controls.Add(this.resetColorsBtn);
+            this.colorsTabP.Controls.Add(this.publicTextColorShownBtn);
+            this.colorsTabP.Controls.Add(this.publicTextBlueTxtB);
+            this.colorsTabP.Controls.Add(this.publicTextBlueLab);
+            this.colorsTabP.Controls.Add(this.publicTextGreenTxtB);
+            this.colorsTabP.Controls.Add(this.publicTextGreenLab);
+            this.colorsTabP.Controls.Add(this.publicTextRedTxtB);
+            this.colorsTabP.Controls.Add(this.publicTextRedLab);
+            this.colorsTabP.Controls.Add(this.publicTextAlphaLab);
+            this.colorsTabP.Controls.Add(this.publicTextAlphaTxtB);
+            this.colorsTabP.Controls.Add(this.publicTextColorLab);
+            this.colorsTabP.Controls.Add(this.protectedTextColorShownBtn);
+            this.colorsTabP.Controls.Add(this.protectedTextBlueTxtB);
+            this.colorsTabP.Controls.Add(this.protectedTextBlueLab);
+            this.colorsTabP.Controls.Add(this.protectedTextGreenTxtB);
+            this.colorsTabP.Controls.Add(this.protectedTextGreenLab);
+            this.colorsTabP.Controls.Add(this.protectedTextRedTxtB);
+            this.colorsTabP.Controls.Add(this.protectedTextRedLab);
+            this.colorsTabP.Controls.Add(this.protectedTextAlphaLab);
+            this.colorsTabP.Controls.Add(this.protectedTextAlphaTxtB);
+            this.colorsTabP.Controls.Add(this.protectedTextColorLab);
+            this.colorsTabP.Controls.Add(this.internalTextColorShownBtn);
+            this.colorsTabP.Controls.Add(this.internalTextBlueTxtB);
+            this.colorsTabP.Controls.Add(this.internalTextBlueLab);
+            this.colorsTabP.Controls.Add(this.internalTextGreenTxtB);
+            this.colorsTabP.Controls.Add(this.internalTextGreenLab);
+            this.colorsTabP.Controls.Add(this.internalTextRedTxtB);
+            this.colorsTabP.Controls.Add(this.internalTextRedLab);
+            this.colorsTabP.Controls.Add(this.internalTextAlphaLab);
+            this.colorsTabP.Controls.Add(this.internalTextAlphaTxtB);
+            this.colorsTabP.Controls.Add(this.internalTextColorLab);
+            this.colorsTabP.Controls.Add(this.privateTextColorShownBtn);
+            this.colorsTabP.Controls.Add(this.privateTextBlueTxtB);
+            this.colorsTabP.Controls.Add(this.privateTextBlueLab);
+            this.colorsTabP.Controls.Add(this.privateTextGreenTxtB);
+            this.colorsTabP.Controls.Add(this.privateTextGreenLab);
+            this.colorsTabP.Controls.Add(this.privateTextRedTxtB);
+            this.colorsTabP.Controls.Add(this.privateTextRedLab);
+            this.colorsTabP.Controls.Add(this.privateTextAlphaLab);
+            this.colorsTabP.Controls.Add(this.privateTextAlphaTxtB);
+            this.colorsTabP.Controls.Add(this.privateColorLab);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorShownBtn);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorBlueTxtB);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorBlueLab);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorGreenTxtB);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorGreenLab);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorRedTxtB);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorRedLab);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorAlphaLab);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorAlphaTxtB);
+            this.colorsTabP.Controls.Add(this.focusedMaskColorLab);
             this.colorsTabP.Location = new System.Drawing.Point(4, 54);
             this.colorsTabP.Name = "colorsTabP";
             this.colorsTabP.Padding = new System.Windows.Forms.Padding(3);
@@ -270,92 +352,453 @@
             this.colorsTabP.Text = "Colors";
             this.colorsTabP.UseVisualStyleBackColor = true;
             // 
-            // selectedColorLab
+            // publicTextColorShownBtn
             // 
-            this.selectedColorLab.AutoSize = true;
-            this.selectedColorLab.Location = new System.Drawing.Point(39, 33);
-            this.selectedColorLab.Name = "selectedColorLab";
-            this.selectedColorLab.Size = new System.Drawing.Size(205, 24);
-            this.selectedColorLab.TabIndex = 1;
-            this.selectedColorLab.Text = "Selected Color:";
+            this.publicTextColorShownBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.publicTextColorShownBtn.Location = new System.Drawing.Point(361, 356);
+            this.publicTextColorShownBtn.Name = "publicTextColorShownBtn";
+            this.publicTextColorShownBtn.Size = new System.Drawing.Size(341, 31);
+            this.publicTextColorShownBtn.TabIndex = 50;
+            this.publicTextColorShownBtn.UseVisualStyleBackColor = true;
+            this.publicTextColorShownBtn.Click += new System.EventHandler(this.publicTextColorShownBtn_Click);
             // 
-            // selectedAlphaTxtB
+            // publicTextBlueTxtB
             // 
-            this.selectedAlphaTxtB.Location = new System.Drawing.Point(124, 71);
-            this.selectedAlphaTxtB.Name = "selectedAlphaTxtB";
-            this.selectedAlphaTxtB.Size = new System.Drawing.Size(62, 35);
-            this.selectedAlphaTxtB.TabIndex = 2;
-            this.selectedAlphaTxtB.TextChanged += new System.EventHandler(this.selectedAlphaTxtB_TextChanged);
+            this.publicTextBlueTxtB.Location = new System.Drawing.Point(640, 392);
+            this.publicTextBlueTxtB.Name = "publicTextBlueTxtB";
+            this.publicTextBlueTxtB.Size = new System.Drawing.Size(62, 35);
+            this.publicTextBlueTxtB.TabIndex = 49;
+            this.publicTextBlueTxtB.TextChanged += new System.EventHandler(this.publicTextBlueTxtB_TextChanged);
             // 
-            // selectedAlphaLab
+            // publicTextBlueLab
             // 
-            this.selectedAlphaLab.AutoSize = true;
-            this.selectedAlphaLab.Location = new System.Drawing.Point(82, 74);
-            this.selectedAlphaLab.Name = "selectedAlphaLab";
-            this.selectedAlphaLab.Size = new System.Drawing.Size(36, 24);
-            this.selectedAlphaLab.TabIndex = 3;
-            this.selectedAlphaLab.Text = "A:";
+            this.publicTextBlueLab.AutoSize = true;
+            this.publicTextBlueLab.Location = new System.Drawing.Point(598, 395);
+            this.publicTextBlueLab.Name = "publicTextBlueLab";
+            this.publicTextBlueLab.Size = new System.Drawing.Size(36, 24);
+            this.publicTextBlueLab.TabIndex = 48;
+            this.publicTextBlueLab.Text = "B:";
             // 
-            // selectedRedLab
+            // publicTextGreenTxtB
             // 
-            this.selectedRedLab.AutoSize = true;
-            this.selectedRedLab.Location = new System.Drawing.Point(259, 74);
-            this.selectedRedLab.Name = "selectedRedLab";
-            this.selectedRedLab.Size = new System.Drawing.Size(36, 24);
-            this.selectedRedLab.TabIndex = 4;
-            this.selectedRedLab.Text = "R:";
+            this.publicTextGreenTxtB.Location = new System.Drawing.Point(473, 392);
+            this.publicTextGreenTxtB.Name = "publicTextGreenTxtB";
+            this.publicTextGreenTxtB.Size = new System.Drawing.Size(62, 35);
+            this.publicTextGreenTxtB.TabIndex = 47;
+            this.publicTextGreenTxtB.TextChanged += new System.EventHandler(this.publicTextGreenTxtB_TextChanged);
             // 
-            // selectedRedTxtB
+            // publicTextGreenLab
             // 
-            this.selectedRedTxtB.Location = new System.Drawing.Point(301, 71);
-            this.selectedRedTxtB.Name = "selectedRedTxtB";
-            this.selectedRedTxtB.Size = new System.Drawing.Size(62, 35);
-            this.selectedRedTxtB.TabIndex = 5;
-            this.selectedRedTxtB.TextChanged += new System.EventHandler(this.selectedRedTxtB_TextChanged);
+            this.publicTextGreenLab.AutoSize = true;
+            this.publicTextGreenLab.Location = new System.Drawing.Point(431, 395);
+            this.publicTextGreenLab.Name = "publicTextGreenLab";
+            this.publicTextGreenLab.Size = new System.Drawing.Size(36, 24);
+            this.publicTextGreenLab.TabIndex = 46;
+            this.publicTextGreenLab.Text = "G:";
             // 
-            // selectedGreenTxtB
+            // publicTextRedTxtB
             // 
-            this.selectedGreenTxtB.Location = new System.Drawing.Point(473, 71);
-            this.selectedGreenTxtB.Name = "selectedGreenTxtB";
-            this.selectedGreenTxtB.Size = new System.Drawing.Size(62, 35);
-            this.selectedGreenTxtB.TabIndex = 7;
-            this.selectedGreenTxtB.TextChanged += new System.EventHandler(this.selectedGreenTxtB_TextChanged);
+            this.publicTextRedTxtB.Location = new System.Drawing.Point(301, 392);
+            this.publicTextRedTxtB.Name = "publicTextRedTxtB";
+            this.publicTextRedTxtB.Size = new System.Drawing.Size(62, 35);
+            this.publicTextRedTxtB.TabIndex = 45;
+            this.publicTextRedTxtB.TextChanged += new System.EventHandler(this.publicTextRedTxtB_TextChanged);
             // 
-            // selectedGreenLab
+            // publicTextRedLab
             // 
-            this.selectedGreenLab.AutoSize = true;
-            this.selectedGreenLab.Location = new System.Drawing.Point(431, 74);
-            this.selectedGreenLab.Name = "selectedGreenLab";
-            this.selectedGreenLab.Size = new System.Drawing.Size(36, 24);
-            this.selectedGreenLab.TabIndex = 6;
-            this.selectedGreenLab.Text = "G:";
+            this.publicTextRedLab.AutoSize = true;
+            this.publicTextRedLab.Location = new System.Drawing.Point(259, 395);
+            this.publicTextRedLab.Name = "publicTextRedLab";
+            this.publicTextRedLab.Size = new System.Drawing.Size(36, 24);
+            this.publicTextRedLab.TabIndex = 44;
+            this.publicTextRedLab.Text = "R:";
             // 
-            // selectedBlueTxtB
+            // publicTextAlphaLab
             // 
-            this.selectedBlueTxtB.Location = new System.Drawing.Point(640, 71);
-            this.selectedBlueTxtB.Name = "selectedBlueTxtB";
-            this.selectedBlueTxtB.Size = new System.Drawing.Size(62, 35);
-            this.selectedBlueTxtB.TabIndex = 9;
-            this.selectedBlueTxtB.TextChanged += new System.EventHandler(this.selectedBlueTxtB_TextChanged);
+            this.publicTextAlphaLab.AutoSize = true;
+            this.publicTextAlphaLab.Location = new System.Drawing.Point(82, 395);
+            this.publicTextAlphaLab.Name = "publicTextAlphaLab";
+            this.publicTextAlphaLab.Size = new System.Drawing.Size(36, 24);
+            this.publicTextAlphaLab.TabIndex = 43;
+            this.publicTextAlphaLab.Text = "A:";
             // 
-            // selectedBlueLab
+            // publicTextAlphaTxtB
             // 
-            this.selectedBlueLab.AutoSize = true;
-            this.selectedBlueLab.Location = new System.Drawing.Point(598, 74);
-            this.selectedBlueLab.Name = "selectedBlueLab";
-            this.selectedBlueLab.Size = new System.Drawing.Size(36, 24);
-            this.selectedBlueLab.TabIndex = 8;
-            this.selectedBlueLab.Text = "B:";
+            this.publicTextAlphaTxtB.Location = new System.Drawing.Point(124, 392);
+            this.publicTextAlphaTxtB.Name = "publicTextAlphaTxtB";
+            this.publicTextAlphaTxtB.Size = new System.Drawing.Size(62, 35);
+            this.publicTextAlphaTxtB.TabIndex = 42;
+            this.publicTextAlphaTxtB.TextChanged += new System.EventHandler(this.publicTextAlphaTxtB_TextChanged);
             // 
-            // selectedColorShownBtn
+            // publicTextColorLab
             // 
-            this.selectedColorShownBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.selectedColorShownBtn.Location = new System.Drawing.Point(250, 30);
-            this.selectedColorShownBtn.Name = "selectedColorShownBtn";
-            this.selectedColorShownBtn.Size = new System.Drawing.Size(452, 31);
-            this.selectedColorShownBtn.TabIndex = 10;
-            this.selectedColorShownBtn.UseVisualStyleBackColor = true;
-            this.selectedColorShownBtn.Click += new System.EventHandler(this.selectedColorShownBtn_Click);
+            this.publicTextColorLab.AutoSize = true;
+            this.publicTextColorLab.Location = new System.Drawing.Point(39, 359);
+            this.publicTextColorLab.Name = "publicTextColorLab";
+            this.publicTextColorLab.Size = new System.Drawing.Size(244, 24);
+            this.publicTextColorLab.TabIndex = 41;
+            this.publicTextColorLab.Text = "Public Text Color:";
+            // 
+            // protectedTextColorShownBtn
+            // 
+            this.protectedTextColorShownBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.protectedTextColorShownBtn.Location = new System.Drawing.Point(361, 272);
+            this.protectedTextColorShownBtn.Name = "protectedTextColorShownBtn";
+            this.protectedTextColorShownBtn.Size = new System.Drawing.Size(341, 31);
+            this.protectedTextColorShownBtn.TabIndex = 40;
+            this.protectedTextColorShownBtn.UseVisualStyleBackColor = true;
+            this.protectedTextColorShownBtn.Click += new System.EventHandler(this.protectedTextColorShownBtn_Click);
+            // 
+            // protectedTextBlueTxtB
+            // 
+            this.protectedTextBlueTxtB.Location = new System.Drawing.Point(640, 308);
+            this.protectedTextBlueTxtB.Name = "protectedTextBlueTxtB";
+            this.protectedTextBlueTxtB.Size = new System.Drawing.Size(62, 35);
+            this.protectedTextBlueTxtB.TabIndex = 39;
+            this.protectedTextBlueTxtB.TextChanged += new System.EventHandler(this.protectedTextBlueTxtB_TextChanged);
+            // 
+            // protectedTextBlueLab
+            // 
+            this.protectedTextBlueLab.AutoSize = true;
+            this.protectedTextBlueLab.Location = new System.Drawing.Point(598, 311);
+            this.protectedTextBlueLab.Name = "protectedTextBlueLab";
+            this.protectedTextBlueLab.Size = new System.Drawing.Size(36, 24);
+            this.protectedTextBlueLab.TabIndex = 38;
+            this.protectedTextBlueLab.Text = "B:";
+            // 
+            // protectedTextGreenTxtB
+            // 
+            this.protectedTextGreenTxtB.Location = new System.Drawing.Point(473, 308);
+            this.protectedTextGreenTxtB.Name = "protectedTextGreenTxtB";
+            this.protectedTextGreenTxtB.Size = new System.Drawing.Size(62, 35);
+            this.protectedTextGreenTxtB.TabIndex = 37;
+            this.protectedTextGreenTxtB.TextChanged += new System.EventHandler(this.protectedTextGreenTxtB_TextChanged);
+            // 
+            // protectedTextGreenLab
+            // 
+            this.protectedTextGreenLab.AutoSize = true;
+            this.protectedTextGreenLab.Location = new System.Drawing.Point(431, 311);
+            this.protectedTextGreenLab.Name = "protectedTextGreenLab";
+            this.protectedTextGreenLab.Size = new System.Drawing.Size(36, 24);
+            this.protectedTextGreenLab.TabIndex = 36;
+            this.protectedTextGreenLab.Text = "G:";
+            // 
+            // protectedTextRedTxtB
+            // 
+            this.protectedTextRedTxtB.Location = new System.Drawing.Point(301, 308);
+            this.protectedTextRedTxtB.Name = "protectedTextRedTxtB";
+            this.protectedTextRedTxtB.Size = new System.Drawing.Size(62, 35);
+            this.protectedTextRedTxtB.TabIndex = 35;
+            this.protectedTextRedTxtB.TextChanged += new System.EventHandler(this.protectedTextRedTxtB_TextChanged);
+            // 
+            // protectedTextRedLab
+            // 
+            this.protectedTextRedLab.AutoSize = true;
+            this.protectedTextRedLab.Location = new System.Drawing.Point(259, 311);
+            this.protectedTextRedLab.Name = "protectedTextRedLab";
+            this.protectedTextRedLab.Size = new System.Drawing.Size(36, 24);
+            this.protectedTextRedLab.TabIndex = 34;
+            this.protectedTextRedLab.Text = "R:";
+            // 
+            // protectedTextAlphaLab
+            // 
+            this.protectedTextAlphaLab.AutoSize = true;
+            this.protectedTextAlphaLab.Location = new System.Drawing.Point(82, 311);
+            this.protectedTextAlphaLab.Name = "protectedTextAlphaLab";
+            this.protectedTextAlphaLab.Size = new System.Drawing.Size(36, 24);
+            this.protectedTextAlphaLab.TabIndex = 33;
+            this.protectedTextAlphaLab.Text = "A:";
+            // 
+            // protectedTextAlphaTxtB
+            // 
+            this.protectedTextAlphaTxtB.Location = new System.Drawing.Point(124, 308);
+            this.protectedTextAlphaTxtB.Name = "protectedTextAlphaTxtB";
+            this.protectedTextAlphaTxtB.Size = new System.Drawing.Size(62, 35);
+            this.protectedTextAlphaTxtB.TabIndex = 32;
+            this.protectedTextAlphaTxtB.TextChanged += new System.EventHandler(this.protectedTextAlphaTxtB_TextChanged);
+            // 
+            // protectedTextColorLab
+            // 
+            this.protectedTextColorLab.AutoSize = true;
+            this.protectedTextColorLab.Location = new System.Drawing.Point(39, 275);
+            this.protectedTextColorLab.Name = "protectedTextColorLab";
+            this.protectedTextColorLab.Size = new System.Drawing.Size(283, 24);
+            this.protectedTextColorLab.TabIndex = 31;
+            this.protectedTextColorLab.Text = "Protected Text Color:";
+            // 
+            // internalTextColorShownBtn
+            // 
+            this.internalTextColorShownBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.internalTextColorShownBtn.Location = new System.Drawing.Point(361, 188);
+            this.internalTextColorShownBtn.Name = "internalTextColorShownBtn";
+            this.internalTextColorShownBtn.Size = new System.Drawing.Size(341, 31);
+            this.internalTextColorShownBtn.TabIndex = 30;
+            this.internalTextColorShownBtn.UseVisualStyleBackColor = true;
+            this.internalTextColorShownBtn.Click += new System.EventHandler(this.internalTextColorShownBtn_Click);
+            // 
+            // internalTextBlueTxtB
+            // 
+            this.internalTextBlueTxtB.Location = new System.Drawing.Point(640, 224);
+            this.internalTextBlueTxtB.Name = "internalTextBlueTxtB";
+            this.internalTextBlueTxtB.Size = new System.Drawing.Size(62, 35);
+            this.internalTextBlueTxtB.TabIndex = 29;
+            this.internalTextBlueTxtB.TextChanged += new System.EventHandler(this.internalTextBlueTxtB_TextChanged);
+            // 
+            // internalTextBlueLab
+            // 
+            this.internalTextBlueLab.AutoSize = true;
+            this.internalTextBlueLab.Location = new System.Drawing.Point(598, 227);
+            this.internalTextBlueLab.Name = "internalTextBlueLab";
+            this.internalTextBlueLab.Size = new System.Drawing.Size(36, 24);
+            this.internalTextBlueLab.TabIndex = 28;
+            this.internalTextBlueLab.Text = "B:";
+            // 
+            // internalTextGreenTxtB
+            // 
+            this.internalTextGreenTxtB.Location = new System.Drawing.Point(473, 224);
+            this.internalTextGreenTxtB.Name = "internalTextGreenTxtB";
+            this.internalTextGreenTxtB.Size = new System.Drawing.Size(62, 35);
+            this.internalTextGreenTxtB.TabIndex = 27;
+            this.internalTextGreenTxtB.TextChanged += new System.EventHandler(this.internalTextGreenTxtB_TextChanged);
+            // 
+            // internalTextGreenLab
+            // 
+            this.internalTextGreenLab.AutoSize = true;
+            this.internalTextGreenLab.Location = new System.Drawing.Point(431, 227);
+            this.internalTextGreenLab.Name = "internalTextGreenLab";
+            this.internalTextGreenLab.Size = new System.Drawing.Size(36, 24);
+            this.internalTextGreenLab.TabIndex = 26;
+            this.internalTextGreenLab.Text = "G:";
+            // 
+            // internalTextRedTxtB
+            // 
+            this.internalTextRedTxtB.Location = new System.Drawing.Point(301, 224);
+            this.internalTextRedTxtB.Name = "internalTextRedTxtB";
+            this.internalTextRedTxtB.Size = new System.Drawing.Size(62, 35);
+            this.internalTextRedTxtB.TabIndex = 25;
+            this.internalTextRedTxtB.TextChanged += new System.EventHandler(this.internalTextRedTxtB_TextChanged);
+            // 
+            // internalTextRedLab
+            // 
+            this.internalTextRedLab.AutoSize = true;
+            this.internalTextRedLab.Location = new System.Drawing.Point(259, 227);
+            this.internalTextRedLab.Name = "internalTextRedLab";
+            this.internalTextRedLab.Size = new System.Drawing.Size(36, 24);
+            this.internalTextRedLab.TabIndex = 24;
+            this.internalTextRedLab.Text = "R:";
+            // 
+            // internalTextAlphaLab
+            // 
+            this.internalTextAlphaLab.AutoSize = true;
+            this.internalTextAlphaLab.Location = new System.Drawing.Point(82, 227);
+            this.internalTextAlphaLab.Name = "internalTextAlphaLab";
+            this.internalTextAlphaLab.Size = new System.Drawing.Size(36, 24);
+            this.internalTextAlphaLab.TabIndex = 23;
+            this.internalTextAlphaLab.Text = "A:";
+            // 
+            // internalTextAlphaTxtB
+            // 
+            this.internalTextAlphaTxtB.Location = new System.Drawing.Point(124, 224);
+            this.internalTextAlphaTxtB.Name = "internalTextAlphaTxtB";
+            this.internalTextAlphaTxtB.Size = new System.Drawing.Size(62, 35);
+            this.internalTextAlphaTxtB.TabIndex = 22;
+            this.internalTextAlphaTxtB.TextChanged += new System.EventHandler(this.internalTextAlphaTxtB_TextChanged);
+            // 
+            // internalTextColorLab
+            // 
+            this.internalTextColorLab.AutoSize = true;
+            this.internalTextColorLab.Location = new System.Drawing.Point(39, 191);
+            this.internalTextColorLab.Name = "internalTextColorLab";
+            this.internalTextColorLab.Size = new System.Drawing.Size(270, 24);
+            this.internalTextColorLab.TabIndex = 21;
+            this.internalTextColorLab.Text = "Internal Text Color:";
+            // 
+            // privateTextColorShownBtn
+            // 
+            this.privateTextColorShownBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.privateTextColorShownBtn.Location = new System.Drawing.Point(361, 105);
+            this.privateTextColorShownBtn.Name = "privateTextColorShownBtn";
+            this.privateTextColorShownBtn.Size = new System.Drawing.Size(341, 31);
+            this.privateTextColorShownBtn.TabIndex = 20;
+            this.privateTextColorShownBtn.UseVisualStyleBackColor = true;
+            this.privateTextColorShownBtn.Click += new System.EventHandler(this.privateTextColorShownBtn_Click);
+            // 
+            // privateTextBlueTxtB
+            // 
+            this.privateTextBlueTxtB.Location = new System.Drawing.Point(640, 141);
+            this.privateTextBlueTxtB.Name = "privateTextBlueTxtB";
+            this.privateTextBlueTxtB.Size = new System.Drawing.Size(62, 35);
+            this.privateTextBlueTxtB.TabIndex = 19;
+            this.privateTextBlueTxtB.TextChanged += new System.EventHandler(this.privateTextBlueTxtB_TextChanged);
+            // 
+            // privateTextBlueLab
+            // 
+            this.privateTextBlueLab.AutoSize = true;
+            this.privateTextBlueLab.Location = new System.Drawing.Point(598, 144);
+            this.privateTextBlueLab.Name = "privateTextBlueLab";
+            this.privateTextBlueLab.Size = new System.Drawing.Size(36, 24);
+            this.privateTextBlueLab.TabIndex = 18;
+            this.privateTextBlueLab.Text = "B:";
+            // 
+            // privateTextGreenTxtB
+            // 
+            this.privateTextGreenTxtB.Location = new System.Drawing.Point(473, 141);
+            this.privateTextGreenTxtB.Name = "privateTextGreenTxtB";
+            this.privateTextGreenTxtB.Size = new System.Drawing.Size(62, 35);
+            this.privateTextGreenTxtB.TabIndex = 17;
+            this.privateTextGreenTxtB.TextChanged += new System.EventHandler(this.privateTextGreenTxtB_TextChanged);
+            // 
+            // privateTextGreenLab
+            // 
+            this.privateTextGreenLab.AutoSize = true;
+            this.privateTextGreenLab.Location = new System.Drawing.Point(431, 144);
+            this.privateTextGreenLab.Name = "privateTextGreenLab";
+            this.privateTextGreenLab.Size = new System.Drawing.Size(36, 24);
+            this.privateTextGreenLab.TabIndex = 16;
+            this.privateTextGreenLab.Text = "G:";
+            // 
+            // privateTextRedTxtB
+            // 
+            this.privateTextRedTxtB.Location = new System.Drawing.Point(301, 141);
+            this.privateTextRedTxtB.Name = "privateTextRedTxtB";
+            this.privateTextRedTxtB.Size = new System.Drawing.Size(62, 35);
+            this.privateTextRedTxtB.TabIndex = 15;
+            this.privateTextRedTxtB.TextChanged += new System.EventHandler(this.privateTextRedTxtB_TextChanged);
+            // 
+            // privateTextRedLab
+            // 
+            this.privateTextRedLab.AutoSize = true;
+            this.privateTextRedLab.Location = new System.Drawing.Point(259, 144);
+            this.privateTextRedLab.Name = "privateTextRedLab";
+            this.privateTextRedLab.Size = new System.Drawing.Size(36, 24);
+            this.privateTextRedLab.TabIndex = 14;
+            this.privateTextRedLab.Text = "R:";
+            // 
+            // privateTextAlphaLab
+            // 
+            this.privateTextAlphaLab.AutoSize = true;
+            this.privateTextAlphaLab.Location = new System.Drawing.Point(82, 144);
+            this.privateTextAlphaLab.Name = "privateTextAlphaLab";
+            this.privateTextAlphaLab.Size = new System.Drawing.Size(36, 24);
+            this.privateTextAlphaLab.TabIndex = 13;
+            this.privateTextAlphaLab.Text = "A:";
+            // 
+            // privateTextAlphaTxtB
+            // 
+            this.privateTextAlphaTxtB.Location = new System.Drawing.Point(124, 141);
+            this.privateTextAlphaTxtB.Name = "privateTextAlphaTxtB";
+            this.privateTextAlphaTxtB.Size = new System.Drawing.Size(62, 35);
+            this.privateTextAlphaTxtB.TabIndex = 12;
+            this.privateTextAlphaTxtB.TextChanged += new System.EventHandler(this.privateTextAlphaTxtB_TextChanged);
+            // 
+            // privateColorLab
+            // 
+            this.privateColorLab.AutoSize = true;
+            this.privateColorLab.Location = new System.Drawing.Point(39, 108);
+            this.privateColorLab.Name = "privateColorLab";
+            this.privateColorLab.Size = new System.Drawing.Size(257, 24);
+            this.privateColorLab.TabIndex = 11;
+            this.privateColorLab.Text = "Private Text Color:";
+            // 
+            // focusedMaskColorShownBtn
+            // 
+            this.focusedMaskColorShownBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.focusedMaskColorShownBtn.Location = new System.Drawing.Point(361, 21);
+            this.focusedMaskColorShownBtn.Name = "focusedMaskColorShownBtn";
+            this.focusedMaskColorShownBtn.Size = new System.Drawing.Size(341, 31);
+            this.focusedMaskColorShownBtn.TabIndex = 10;
+            this.focusedMaskColorShownBtn.UseVisualStyleBackColor = true;
+            this.focusedMaskColorShownBtn.Click += new System.EventHandler(this.focusedMaskColorShownBtn_Click);
+            // 
+            // focusedMaskColorBlueTxtB
+            // 
+            this.focusedMaskColorBlueTxtB.Location = new System.Drawing.Point(640, 56);
+            this.focusedMaskColorBlueTxtB.Name = "focusedMaskColorBlueTxtB";
+            this.focusedMaskColorBlueTxtB.Size = new System.Drawing.Size(62, 35);
+            this.focusedMaskColorBlueTxtB.TabIndex = 9;
+            this.focusedMaskColorBlueTxtB.TextChanged += new System.EventHandler(this.focusedMaskColorBlueTxtB_TextChanged);
+            // 
+            // focusedMaskColorBlueLab
+            // 
+            this.focusedMaskColorBlueLab.AutoSize = true;
+            this.focusedMaskColorBlueLab.Location = new System.Drawing.Point(598, 59);
+            this.focusedMaskColorBlueLab.Name = "focusedMaskColorBlueLab";
+            this.focusedMaskColorBlueLab.Size = new System.Drawing.Size(36, 24);
+            this.focusedMaskColorBlueLab.TabIndex = 8;
+            this.focusedMaskColorBlueLab.Text = "B:";
+            // 
+            // focusedMaskColorGreenTxtB
+            // 
+            this.focusedMaskColorGreenTxtB.Location = new System.Drawing.Point(473, 56);
+            this.focusedMaskColorGreenTxtB.Name = "focusedMaskColorGreenTxtB";
+            this.focusedMaskColorGreenTxtB.Size = new System.Drawing.Size(62, 35);
+            this.focusedMaskColorGreenTxtB.TabIndex = 7;
+            this.focusedMaskColorGreenTxtB.TextChanged += new System.EventHandler(this.focusedMaskColorGreenTxtB_TextChanged);
+            // 
+            // focusedMaskColorGreenLab
+            // 
+            this.focusedMaskColorGreenLab.AutoSize = true;
+            this.focusedMaskColorGreenLab.Location = new System.Drawing.Point(431, 59);
+            this.focusedMaskColorGreenLab.Name = "focusedMaskColorGreenLab";
+            this.focusedMaskColorGreenLab.Size = new System.Drawing.Size(36, 24);
+            this.focusedMaskColorGreenLab.TabIndex = 6;
+            this.focusedMaskColorGreenLab.Text = "G:";
+            // 
+            // focusedMaskColorRedTxtB
+            // 
+            this.focusedMaskColorRedTxtB.Location = new System.Drawing.Point(301, 56);
+            this.focusedMaskColorRedTxtB.Name = "focusedMaskColorRedTxtB";
+            this.focusedMaskColorRedTxtB.Size = new System.Drawing.Size(62, 35);
+            this.focusedMaskColorRedTxtB.TabIndex = 5;
+            this.focusedMaskColorRedTxtB.TextChanged += new System.EventHandler(this.focusedMaskColorRedTxtB_TextChanged);
+            // 
+            // focusedMaskColorRedLab
+            // 
+            this.focusedMaskColorRedLab.AutoSize = true;
+            this.focusedMaskColorRedLab.Location = new System.Drawing.Point(259, 59);
+            this.focusedMaskColorRedLab.Name = "focusedMaskColorRedLab";
+            this.focusedMaskColorRedLab.Size = new System.Drawing.Size(36, 24);
+            this.focusedMaskColorRedLab.TabIndex = 4;
+            this.focusedMaskColorRedLab.Text = "R:";
+            // 
+            // focusedMaskColorAlphaLab
+            // 
+            this.focusedMaskColorAlphaLab.AutoSize = true;
+            this.focusedMaskColorAlphaLab.Location = new System.Drawing.Point(82, 59);
+            this.focusedMaskColorAlphaLab.Name = "focusedMaskColorAlphaLab";
+            this.focusedMaskColorAlphaLab.Size = new System.Drawing.Size(36, 24);
+            this.focusedMaskColorAlphaLab.TabIndex = 3;
+            this.focusedMaskColorAlphaLab.Text = "A:";
+            // 
+            // focusedMaskColorAlphaTxtB
+            // 
+            this.focusedMaskColorAlphaTxtB.Location = new System.Drawing.Point(124, 56);
+            this.focusedMaskColorAlphaTxtB.Name = "focusedMaskColorAlphaTxtB";
+            this.focusedMaskColorAlphaTxtB.Size = new System.Drawing.Size(62, 35);
+            this.focusedMaskColorAlphaTxtB.TabIndex = 2;
+            this.focusedMaskColorAlphaTxtB.TextChanged += new System.EventHandler(this.focusedMaskColorAlphaTxtB_TextChanged);
+            // 
+            // focusedMaskColorLab
+            // 
+            this.focusedMaskColorLab.AutoSize = true;
+            this.focusedMaskColorLab.Location = new System.Drawing.Point(39, 24);
+            this.focusedMaskColorLab.Name = "focusedMaskColorLab";
+            this.focusedMaskColorLab.Size = new System.Drawing.Size(257, 24);
+            this.focusedMaskColorLab.TabIndex = 1;
+            this.focusedMaskColorLab.Text = "Focused Mask Color:";
+            // 
+            // resetColorsBtn
+            // 
+            this.resetColorsBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.resetColorsBtn.Location = new System.Drawing.Point(43, 440);
+            this.resetColorsBtn.Name = "resetColorsBtn";
+            this.resetColorsBtn.Size = new System.Drawing.Size(659, 38);
+            this.resetColorsBtn.TabIndex = 51;
+            this.resetColorsBtn.Text = "Reset";
+            this.resetColorsBtn.UseVisualStyleBackColor = true;
+            this.resetColorsBtn.Click += new System.EventHandler(this.resetColorsBtn_Click);
             // 
             // SettingsForm
             // 
@@ -402,17 +845,58 @@
         private System.Windows.Forms.TextBox rightMarginTxtB;
         private System.Windows.Forms.TextBox topMarginTxtB;
         private System.Windows.Forms.TextBox leftMarginTxtB;
-        private System.Windows.Forms.Button resetBtn;
+        private System.Windows.Forms.Button resetFontStylesBtn;
         private System.Windows.Forms.TabPage colorsTabP;
-        private System.Windows.Forms.Label selectedColorLab;
-        private System.Windows.Forms.Label selectedRedLab;
-        private System.Windows.Forms.Label selectedAlphaLab;
-        private System.Windows.Forms.TextBox selectedAlphaTxtB;
-        private System.Windows.Forms.TextBox selectedGreenTxtB;
-        private System.Windows.Forms.Label selectedGreenLab;
-        private System.Windows.Forms.TextBox selectedRedTxtB;
-        private System.Windows.Forms.TextBox selectedBlueTxtB;
-        private System.Windows.Forms.Label selectedBlueLab;
-        private System.Windows.Forms.Button selectedColorShownBtn;
+        private System.Windows.Forms.Label focusedMaskColorLab;
+        private System.Windows.Forms.Label focusedMaskColorRedLab;
+        private System.Windows.Forms.Label focusedMaskColorAlphaLab;
+        private System.Windows.Forms.TextBox focusedMaskColorAlphaTxtB;
+        private System.Windows.Forms.TextBox focusedMaskColorGreenTxtB;
+        private System.Windows.Forms.Label focusedMaskColorGreenLab;
+        private System.Windows.Forms.TextBox focusedMaskColorRedTxtB;
+        private System.Windows.Forms.TextBox focusedMaskColorBlueTxtB;
+        private System.Windows.Forms.Label focusedMaskColorBlueLab;
+        private System.Windows.Forms.Button focusedMaskColorShownBtn;
+        private System.Windows.Forms.Button protectedTextColorShownBtn;
+        private System.Windows.Forms.TextBox protectedTextBlueTxtB;
+        private System.Windows.Forms.Label protectedTextBlueLab;
+        private System.Windows.Forms.TextBox protectedTextGreenTxtB;
+        private System.Windows.Forms.Label protectedTextGreenLab;
+        private System.Windows.Forms.TextBox protectedTextRedTxtB;
+        private System.Windows.Forms.Label protectedTextRedLab;
+        private System.Windows.Forms.Label protectedTextAlphaLab;
+        private System.Windows.Forms.TextBox protectedTextAlphaTxtB;
+        private System.Windows.Forms.Label protectedTextColorLab;
+        private System.Windows.Forms.Button internalTextColorShownBtn;
+        private System.Windows.Forms.TextBox internalTextBlueTxtB;
+        private System.Windows.Forms.Label internalTextBlueLab;
+        private System.Windows.Forms.TextBox internalTextGreenTxtB;
+        private System.Windows.Forms.Label internalTextGreenLab;
+        private System.Windows.Forms.TextBox internalTextRedTxtB;
+        private System.Windows.Forms.Label internalTextRedLab;
+        private System.Windows.Forms.Label internalTextAlphaLab;
+        private System.Windows.Forms.TextBox internalTextAlphaTxtB;
+        private System.Windows.Forms.Label internalTextColorLab;
+        private System.Windows.Forms.Button privateTextColorShownBtn;
+        private System.Windows.Forms.TextBox privateTextBlueTxtB;
+        private System.Windows.Forms.Label privateTextBlueLab;
+        private System.Windows.Forms.TextBox privateTextGreenTxtB;
+        private System.Windows.Forms.Label privateTextGreenLab;
+        private System.Windows.Forms.TextBox privateTextRedTxtB;
+        private System.Windows.Forms.Label privateTextRedLab;
+        private System.Windows.Forms.Label privateTextAlphaLab;
+        private System.Windows.Forms.TextBox privateTextAlphaTxtB;
+        private System.Windows.Forms.Label privateColorLab;
+        private System.Windows.Forms.Button publicTextColorShownBtn;
+        private System.Windows.Forms.TextBox publicTextBlueTxtB;
+        private System.Windows.Forms.Label publicTextBlueLab;
+        private System.Windows.Forms.TextBox publicTextGreenTxtB;
+        private System.Windows.Forms.Label publicTextGreenLab;
+        private System.Windows.Forms.TextBox publicTextRedTxtB;
+        private System.Windows.Forms.Label publicTextRedLab;
+        private System.Windows.Forms.Label publicTextAlphaLab;
+        private System.Windows.Forms.TextBox publicTextAlphaTxtB;
+        private System.Windows.Forms.Label publicTextColorLab;
+        private System.Windows.Forms.Button resetColorsBtn;
     }
 }
