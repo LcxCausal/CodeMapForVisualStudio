@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="CodeMapForVisualStudio.c8f2f1f9-195b-4282-9bea-41e6859ea7fb" Version="1.0" Language="en-US" Publisher="Chengxian Liu" />
+        <Identity Id="CodeMapForVisualStudio.c8f2f1f9-195b-4282-9bea-41e6859ea7fb" Version="2.1" Language="en-US" Publisher="Chengxian Liu" />
         <DisplayName>CodeMapForVisualStudio</DisplayName>
         <Description xml:space="preserve">This is a code map for visual studio extension.</Description>
     </Metadata>
